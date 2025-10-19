@@ -33,7 +33,7 @@
             z-index: 100;
             transition: opacity 1s ease-in-out;
             /* **[GANTI INI]**: Sesuaikan dengan nama file gambar background Anda */
-            background-image: url('background.jpg'); 
+            background-image: url('cover-background.jpg'); 
         }
 
         #cover-page h1 {
@@ -63,23 +63,38 @@
             display: none;
             min-height: 100vh;
             position: relative; 
-            /* Mengaktifkan scrolling jika konten lebih panjang dari viewport */
             overflow-y: auto; 
         }
         
-        /* Vimeo Player sebagai Background */
+        /* Vimeo Player (Hanya aktif untuk Profile) */
         #vimeo-player {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: -1;
+            z-index: -2; /* Lebih rendah dari background gambar */
             pointer-events: none;
             object-fit: cover; 
             overflow: hidden;
+            display: none; /* Sembunyikan secara default */
         }
         
+        /* Background Gambar (Aktif untuk Acara & Kado) */
+        #image-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; 
+            background-size: cover;
+            background-position: center;
+            display: none; /* Sembunyikan secara default */
+            /* **[GANTI INI]**: Sesuaikan dengan nama file gambar background untuk Acara/Kado */
+            background-image: url('background_acara_kado.jpg'); 
+        }
+
         /* Kontrol Video (Floating Button) */
         #video-controls {
             position: fixed;
@@ -87,6 +102,7 @@
             right: 10px;
             z-index: 51; 
             transition: opacity 0.3s;
+            display: none; /* Sembunyikan secara default */
         }
         
         #video-controls button {
@@ -128,11 +144,11 @@
             color: #6a4c9c;
             font-size: 0.7em;
             text-decoration: none;
-            cursor: pointer; /* Agar terasa seperti tombol */
+            cursor: pointer;
         }
         
         .nav-item.active {
-            color: #4b3e3e; /* Warna ikon dan teks yang aktif */
+            color: #4b3e3e;
         }
 
         .nav-item i {
@@ -142,19 +158,24 @@
 
         /* --- Konten Section (Sistem Halaman) --- */
         .content-section {
-            /* Pastikan setiap section mengisi seluruh tinggi layar */
-            min-height: calc(100vh - 60px); /* 100vh dikurangi tinggi navbar */
-            padding-top: 50px; /* Padding atas agar tidak tertutup tombol kontrol */
-            padding-bottom: 70px; /* Padding bawah agar tidak tertutup navbar */
+            min-height: calc(100vh - 60px); 
+            padding-top: 50px; 
+            padding-bottom: 70px; 
             box-sizing: border-box; 
             
-            display: none; /* Sembunyikan semua section secara default */
+            display: none; 
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             
             text-align: center; 
+        }
+        
+        /* Style khusus untuk Profile (tanpa wrapper, agar video full-screen) */
+        #profile.content-section {
+            /* Pastikan Profile tidak memiliki konten di atas video */
+            background: transparent; 
         }
         
         /* Konten di dalam section */
@@ -204,6 +225,8 @@
             allow="autoplay; fullscreen; picture-in-picture" 
             allowfullscreen>
         </iframe>
+        
+        <div id="image-background"></div>
 
         <div id="video-controls">
             <button id="toggle-video-btn"><i class="fas fa-play"></i></button>
@@ -213,17 +236,13 @@
             </button>
         </div>
 
+        <div class="content-section" id="profile">
+            </div>
+        
         <div class="content-section" id="detail">
             <div class="content-wrapper">
                 <h2>Detail Acara</h2>
                 <p>Informasi lokasi, tanggal, dan waktu.</p>
-            </div>
-        </div>
-        
-        <div class="content-section" id="galeri">
-            <div class="content-wrapper">
-                <h2>Galeri Foto</h2>
-                <p>Tempat foto-foto Anda berdua.</p>
             </div>
         </div>
         
@@ -262,18 +281,11 @@
                 <p>Formulir kehadiran dan ucapan dari tamu.</p>
             </div>
         </div>
-
-        <div class="content-section" id="profile">
-            <div class="content-wrapper">
-                <h2>Profile Pengantin</h2>
-                <p>Cerita dan informasi tentang Ovi & Vian.</p>
-            </div>
-        </div>
         
     </div>
 
     <div id="navigator-bar" class="navbar-hidden">
-        <a href="#cover-page" class="nav-item" data-target="cover-page">
+        <a href="#" class="nav-item" data-target="cover-page">
             <i class="fas fa-envelope"></i>
             <span>Undangan</span>
         </a>
@@ -285,13 +297,13 @@
             <i class="fas fa-calendar-alt"></i>
             <span>Acara</span>
         </a>
-        <a href="#galeri" class="nav-item" data-target="galeri">
-            <i class="fas fa-camera"></i>
-            <span>Galeri</span>
-        </a>
         <a href="#kado" class="nav-item" data-target="kado">
             <i class="fas fa-gift"></i>
             <span>Kado</span>
+        </a>
+        <a href="#rsvp" class="nav-item" data-target="rsvp">
+            <i class="fas fa-comment-alt"></i>
+            <span>RSVP</span>
         </a>
     </div>
 
@@ -302,40 +314,72 @@
         var navBar = document.getElementById('navigator-bar');
         var toggleBtn = document.getElementById('toggle-video-btn');
         var icon = toggleBtn.querySelector('i');
+        const videoPlayer = document.getElementById('vimeo-player');
+        const imageBackground = document.getElementById('image-background');
+        const videoControls = document.getElementById('video-controls');
         
         // Logika Mute/Unmute
         const toggleMuteBtn = document.getElementById('toggle-mute-btn');
         const muteIcon = toggleMuteBtn.querySelector('i');
-        let isMuted = true; // Sesuai dengan setting iframe awal (muted=1)
+        let isMuted = true; 
+
+
+        // --- FUNGSI KONTROL BACKGROUND DINAMIS ---
+        function setBackground(targetId) {
+            if (targetId === 'profile') {
+                // Tampilkan Video, Sembunyikan Gambar
+                videoPlayer.style.display = 'block';
+                imageBackground.style.display = 'none';
+                videoControls.style.display = 'flex'; // Tampilkan kontrol video
+                
+                // Pastikan video di-play
+                if (player) {
+                    player.play();
+                }
+            } else {
+                // Sembunyikan Video, Tampilkan Gambar
+                videoPlayer.style.display = 'none';
+                imageBackground.style.display = 'block';
+                videoControls.style.display = 'none'; // Sembunyikan kontrol video
+                
+                // Pastikan video di-pause
+                if (player) {
+                    player.pause();
+                }
+            }
+        }
 
         // --- FUNGSI TAMPILAN HALAMAN ---
         function showSection(targetId) {
             const sections = document.querySelectorAll('.content-section');
             const navItems = document.querySelectorAll('.nav-item');
 
-            // 1. Sembunyikan semua section
+            // 1. Ganti Background
+            setBackground(targetId);
+
+            // 2. Sembunyikan semua section
             sections.forEach(section => {
                 section.style.display = 'none';
             });
             
-            // 2. Hapus status active dari semua nav item
+            // 3. Hapus status active dari semua nav item
             navItems.forEach(item => {
                 item.classList.remove('active');
             });
             
-            // 3. Tampilkan section yang ditargetkan
+            // 4. Tampilkan section yang ditargetkan
             const targetSection = document.getElementById(targetId);
             if (targetSection) {
                 targetSection.style.display = 'block';
             }
             
-            // 4. Set status active pada nav item yang sesuai
+            // 5. Set status active pada nav item yang sesuai
             const targetNavItem = document.querySelector(`.nav-item[data-target="${targetId}"]`);
             if (targetNavItem) {
                 targetNavItem.classList.add('active');
             }
             
-            // 5. Gulir ke atas halaman
+            // 6. Gulir ke atas halaman
             document.getElementById('main-content').scrollTop = 0;
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
@@ -346,13 +390,13 @@
         function onPlayerPlay() {
             playerStatus = 'playing';
             icon.className = 'fas fa-pause';
-            navBar.classList.add('navbar-hidden'); // Sembunyikan navbar
+            navBar.classList.add('navbar-hidden');
         }
 
         function onPlayerPause() {
             playerStatus = 'paused';
             icon.className = 'fas fa-play';
-            navBar.classList.remove('navbar-hidden'); // Tampilkan navbar
+            navBar.classList.remove('navbar-hidden');
         }
 
         function onPlayerEnded() {
@@ -371,7 +415,7 @@
                 player.ready().then(function() {
                     // Set status awal ke Paused dan Muted
                     onPlayerPause(); 
-                    player.setVolume(0); // Pastikan volume 0 untuk Autoplay di seluler
+                    player.setVolume(0); 
 
                     // Tambahkan event listeners
                     player.on('play', onPlayerPlay);
@@ -391,13 +435,9 @@
                     coverPage.style.display = 'none';
                     mainContent.style.display = 'block';
                     
-                    // Tampilkan section pertama ('detail')
+                    // Tampilkan section pertama ('detail') dan set background gambar
                     showSection('detail');
                     
-                    // Mulai Video Vimeo
-                    if (player) {
-                        player.play();
-                    }
                 }, 1000);
             });
 
@@ -413,11 +453,11 @@
             // Logika Kontrol Mute/Unmute
             toggleMuteBtn.addEventListener('click', function() {
                 if (isMuted) {
-                    player.setVolume(1); // Set volume ke 1 (maks)
+                    player.setVolume(1); 
                     muteIcon.className = 'fas fa-volume-up';
                     isMuted = false;
                 } else {
-                    player.setVolume(0); // Set volume ke 0 (mute)
+                    player.setVolume(0); 
                     muteIcon.className = 'fas fa-volume-mute';
                     isMuted = true;
                 }
@@ -429,16 +469,14 @@
                     e.preventDefault();
                     
                     const target = this.getAttribute('data-target');
+                    
                     if(target === 'cover-page') {
-                        // Jika target adalah cover-page, lakukan refresh/re-load
+                        // Kebutuhan 1: Kembali ke halaman "Buka Undangan" (dengan refresh)
                         window.location.reload(); 
                         return;
                     }
                     
-                    // Pause video dan tampilkan halaman baru
-                    if (player) {
-                        player.pause();
-                    }
+                    // Kebutuhan 3, 4, 5: Tampilkan halaman dan atur background
                     showSection(target);
                 });
             });
@@ -465,6 +503,9 @@
                     });
                 });
             });
+            
+            // Inisialisasi awal (set background gambar secara default)
+            imageBackground.style.display = 'block';
         });
     </script>
 
