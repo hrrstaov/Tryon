@@ -32,7 +32,7 @@
             color: #4b3e3e;
             z-index: 100;
             transition: opacity 1s ease-in-out;
-            /* **[GANTI INI]**: Sesuaikan dengan nama file gambar background Anda */
+            /* **[GANTI INI]**: Sesuaikan dengan nama file gambar cover Anda (misal: 'cover-background.jpg') */
             background-image: url('cover-background.jpg'); 
         }
 
@@ -73,11 +73,11 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: -2; /* Lebih rendah dari background gambar */
+            z-index: -2; /* Di bawah gambar background */
             pointer-events: none;
             object-fit: cover; 
             overflow: hidden;
-            display: none; /* Sembunyikan secara default */
+            display: none; 
         }
         
         /* Background Gambar (Aktif untuk Acara & Kado) */
@@ -87,12 +87,12 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: -1; 
+            z-index: -1; /* Di atas video, di bawah konten */
             background-size: cover;
             background-position: center;
-            display: none; /* Sembunyikan secara default */
+            display: none; 
             /* **[GANTI INI]**: Sesuaikan dengan nama file gambar background untuk Acara/Kado */
-            background-image: url('background_acara_kado.jpg'); 
+            background-image: url('background.jpg'); 
         }
 
         /* Kontrol Video (Floating Button) */
@@ -102,7 +102,7 @@
             right: 10px;
             z-index: 51; 
             transition: opacity 0.3s;
-            display: none; /* Sembunyikan secara default */
+            display: none; 
         }
         
         #video-controls button {
@@ -172,10 +172,12 @@
             text-align: center; 
         }
         
-        /* Style khusus untuk Profile (tanpa wrapper, agar video full-screen) */
+        /* Style khusus untuk Profile: Pastikan tidak ada latar belakang sama sekali */
         #profile.content-section {
-            /* Pastikan Profile tidak memiliki konten di atas video */
             background: transparent; 
+            /* Karena ini halaman profile, kita tidak perlu padding, biarkan video yang mengisi. */
+            padding-top: 0;
+            padding-bottom: 0;
         }
         
         /* Konten di dalam section */
@@ -333,8 +335,12 @@
                 videoControls.style.display = 'flex'; // Tampilkan kontrol video
                 
                 // Pastikan video di-play
-                if (player) {
-                    player.play();
+                if (player && playerStatus !== 'playing') {
+                    player.play().catch(error => {
+                        console.log("Autoplay di Profile diblokir, menunggu interaksi pengguna.");
+                        playerStatus = 'paused';
+                        icon.className = 'fas fa-play';
+                    });
                 }
             } else {
                 // Sembunyikan Video, Tampilkan Gambar
@@ -342,8 +348,8 @@
                 imageBackground.style.display = 'block';
                 videoControls.style.display = 'none'; // Sembunyikan kontrol video
                 
-                // Pastikan video di-pause
-                if (player) {
+                // Pastikan video di-pause saat keluar dari halaman profile
+                if (player && playerStatus === 'playing') {
                     player.pause();
                 }
             }
@@ -354,7 +360,7 @@
             const sections = document.querySelectorAll('.content-section');
             const navItems = document.querySelectorAll('.nav-item');
 
-            // 1. Ganti Background
+            // 1. Ganti Background (dan Play/Pause Video)
             setBackground(targetId);
 
             // 2. Sembunyikan semua section
@@ -476,7 +482,7 @@
                         return;
                     }
                     
-                    // Kebutuhan 3, 4, 5: Tampilkan halaman dan atur background
+                    // Tampilkan halaman dan atur background
                     showSection(target);
                 });
             });
