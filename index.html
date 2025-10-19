@@ -32,7 +32,7 @@
             color: #4b3e3e;
             z-index: 100;
             transition: opacity 1s ease-in-out;
-            /* **[GANTI INI]**: Sesuaikan dengan nama file gambar background Anda (harus di folder yang sama) */
+            /* **[GANTI INI]**: Sesuaikan dengan nama file gambar background Anda */
             background-image: url('background.jpg'); 
         }
 
@@ -67,8 +67,8 @@
             position: relative; 
         }
         
-        /* YouTube Player sebagai Background */
-        #youtube-player {
+        /* Vimeo Player sebagai Background */
+        #vimeo-player {
             position: fixed;
             top: 0;
             left: 0;
@@ -76,6 +76,8 @@
             height: 100vh;
             z-index: -1;
             pointer-events: none;
+            object-fit: cover; 
+            overflow: hidden;
         }
         
         /* Tombol Pause/Play Video (Floating Button) */
@@ -175,26 +177,26 @@
     <div id="main-content">
         
         <iframe 
-            id="youtube-player" 
-            src="https://www.youtube.com/embed/9-Kd9WLdiSE?playlist=9-Kd9WLdiSE&autoplay=0&controls=0&mute=1&disablekb=1&modestbranding=1&enablejsapi=1&playsinline=1" 
+            id="vimeo-player" 
+            src="https://player.vimeo.com/video/1128592080?background=1&autoplay=0&loop=1&muted=1&playsinline=1&autopause=0&api=1&player_id=vimeo-player"
             frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allow="autoplay; fullscreen; picture-in-picture" 
             allowfullscreen>
         </iframe>
 
         <div id="video-controls">
-            <button id="toggle-video-btn"><i class="fas fa-pause"></i></button>
+            <button id="toggle-video-btn"><i class="fas fa-play"></i></button>
         </div>
 
         <div class="content-section" id="detail">
             <h2>Detail Acara</h2>
             <p>Informasi lokasi, tanggal, dan waktu.</p>
-            </div>
+        </div>
         
         <div class="content-section" id="galeri">
             <h2>Galeri Foto</h2>
             <p>Tempat foto-foto Anda berdua.</p>
-            </div>
+        </div>
         
         <div class="content-section" id="kado">
             <h2><i class="fas fa-gift"></i> Kirim Hadiah & Tanda Kasih</h2>
@@ -226,7 +228,7 @@
         <div class="content-section" id="rsvp">
             <h2>RSVP & Ucapan</h2>
             <p>Formulir kehadiran dan ucapan dari tamu.</p>
-            </div>
+        </div>
         
     </div>
 
@@ -253,120 +255,116 @@
         </a>
     </div>
 
+    <script src="https://player.vimeo.com/api/player.js"></script>
     <script>
-        // Memuat YouTube Player API
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        var player;
+        var player; // Objek Vimeo Player
         var playerStatus = 'paused';
         var navBar = document.getElementById('navigator-bar');
+        var toggleBtn = document.getElementById('toggle-video-btn');
+        var icon = toggleBtn.querySelector('i');
 
-        // Fungsi yang dipanggil saat YouTube API siap
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('youtube-player', {
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
+
+        // Callbacks untuk Vimeo
+        function onPlayerPlay() {
+            playerStatus = 'playing';
+            icon.className = 'fas fa-pause';
+            navBar.classList.add('navbar-hidden'); // Sembunyikan navbar
+        }
+
+        function onPlayerPause() {
+            playerStatus = 'paused';
+            icon.className = 'fas fa-play';
+            navBar.classList.remove('navbar-hidden'); // Tampilkan navbar
+        }
+
+        // Vimeo otomatis looping karena kita pakai parameter loop=1 di URL, tapi ini sebagai fallback
+        function onPlayerEnded() {
+            player.setCurrentTime(0);
+            player.play();
+        }
+
+
+        // Inisialisasi Player Vimeo setelah DOM siap
+        document.addEventListener('DOMContentLoaded', function() {
+            var iframe = document.getElementById('vimeo-player');
+            
+            if (iframe) {
+                // Inisialisasi objek Vimeo Player
+                player = new Vimeo.Player(iframe);
+                
+                player.ready().then(function() {
+                    // Tampilkan navbar di awal (saat video paused)
+                    onPlayerPause(); 
+
+                    // Tambahkan event listeners untuk status play/pause/ended
+                    player.on('play', onPlayerPlay);
+                    player.on('pause', onPlayerPause);
+                    player.on('ended', onPlayerEnded);
+                });
+            }
+
+            // Logika Tombol Buka Undangan
+            document.getElementById('open-invitation-btn').addEventListener('click', function() {
+                var coverPage = document.getElementById('cover-page');
+                var mainContent = document.getElementById('main-content');
+
+                coverPage.style.opacity = '0';
+                
+                setTimeout(function() {
+                    coverPage.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    
+                    // Mulai Video Vimeo
+                    if (player) {
+                        player.play();
+                    }
+                }, 1000);
+            });
+
+            // Kontrol Video Pause/Play
+            toggleBtn.addEventListener('click', function() {
+                if (playerStatus === 'playing') {
+                    player.pause();
+                } else {
+                    player.play();
                 }
             });
-        }
-        
-        function onPlayerReady(event) {
-            navBar.classList.remove('navbar-hidden');
-        }
-
-
-        // Fungsi untuk melacak status player, mengontrol navbar, dan looping manual
-        function onPlayerStateChange(event) {
-            var toggleBtn = document.getElementById('toggle-video-btn');
-            var icon = toggleBtn.querySelector('i');
-
-            if (event.data == YT.PlayerState.PLAYING) {
-                // Video sedang berjalan: Sembunyikan Navbar
-                playerStatus = 'playing';
-                icon.className = 'fas fa-pause';
-                navBar.classList.add('navbar-hidden'); 
-
-            } else if (event.data == YT.PlayerState.ENDED) {
-                // Video Selesai: Putar ulang untuk looping
-                player.seekTo(0); 
-                player.playVideo(); 
-                
-            } else {
-                // Video sedang berhenti (PAUSED, BUFFERING, dll.): Tampilkan Navbar
-                playerStatus = 'paused';
-                icon.className = 'fas fa-play';
-                navBar.classList.remove('navbar-hidden');
-            }
-        }
-
-        // Logika Tombol Buka Undangan
-        document.getElementById('open-invitation-btn').addEventListener('click', function() {
-            var coverPage = document.getElementById('cover-page');
-            var mainContent = document.getElementById('main-content');
-
-            coverPage.style.opacity = '0';
             
-            setTimeout(function() {
-                coverPage.style.display = 'none';
-                mainContent.style.display = 'block';
-                
-                // Mulai Video
-                if (player && player.playVideo) {
-                    player.playVideo();
-                }
-            }, 1000);
-        });
+            // --- Logika Salin Nomor Rekening ---
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const elementToCopy = document.getElementById(targetId);
+                    const textToCopy = elementToCopy.textContent || elementToCopy.innerText;
 
-        // Kontrol Video Pause/Play
-        document.getElementById('toggle-video-btn').addEventListener('click', function() {
-            if (playerStatus === 'playing') {
-                player.pauseVideo();
-            } else {
-                player.playVideo();
-            }
-        });
-        
-        // --- Logika Salin Nomor Rekening ---
-        document.querySelectorAll('.copy-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const targetId = this.getAttribute('data-target');
-                const elementToCopy = document.getElementById(targetId);
-                const textToCopy = elementToCopy.textContent || elementToCopy.innerText;
-
-                // Salin teks ke clipboard
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    // Beri umpan balik ke pengguna
-                    const originalText = this.textContent;
-                    this.textContent = 'Berhasil Disalin!';
-                    this.style.backgroundColor = '#4CAF50';
-                    
-                    // Kembalikan teks tombol setelah beberapa saat
-                    setTimeout(() => {
-                        this.textContent = originalText;
-                        this.style.backgroundColor = '#6a4c9c';
-                    }, 1500);
-                }).catch(err => {
-                    console.error('Gagal menyalin teks: ', err);
-                    alert('Gagal menyalin nomor rekening. Silakan salin manual.');
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = 'Berhasil Disalin!';
+                        this.style.backgroundColor = '#4CAF50';
+                        
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                            this.style.backgroundColor = '#6a4c9c';
+                        }, 1500);
+                    }).catch(err => {
+                        console.error('Gagal menyalin teks: ', err);
+                        alert('Gagal menyalin nomor rekening. Silakan salin manual.');
+                    });
                 });
             });
-        });
-        
-        // Fungsi untuk Smooth Scrolling pada Navigator Bar 
-        document.querySelectorAll('#navigator-bar a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                // Pause video ketika navigasi diklik
-                if (player && player.pauseVideo) {
-                    player.pauseVideo();
-                }
+            
+            // Fungsi untuk Smooth Scrolling pada Navigator Bar 
+            document.querySelectorAll('#navigator-bar a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    // Pause video ketika navigasi diklik
+                    if (player) {
+                        player.pause();
+                    }
 
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
                 });
             });
         });
