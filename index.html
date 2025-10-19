@@ -350,6 +350,36 @@
             margin-top: 10px;
             display: none;
         }
+
+        .guestbook-item {
+            background-color: #f7fef7; 
+            border-left: 5px solid #6a4c9c; 
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            text-align: left;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .guestbook-item .name {
+            font-weight: bold;
+            color: #4b3e3e;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .guestbook-item .attendance {
+            font-size: 0.8em;
+            font-weight: normal;
+        }
+
+        .guestbook-item .message {
+            font-style: italic;
+            color: #666;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -449,26 +479,39 @@
                 
                 <hr style="border-color: #eee; margin: 20px 0;">
                 
-                <form class="rsvp-form" id="rsvp-form">
-                    <label for="guest_name">Your Name:</label>
-                    <input type="text" id="guest_name" name="guest_name" required placeholder="Example: xxx">
-
-                    <label for="attendance">Confirm your Attendance:</label>
-                    <select id="attendance" name="attendance" required>
-                        <option value="">-- Choose --</option>
-                        <option value="Hadir">I can!</option>
-                        <option value="Tidak Hadir">Sorry, no:(</option>
+                <form class="rsvp-form" id="rsvp-form" 
+                    action="https://docs.google.com/forms/d/e/1FAIpQLScKRUPEOWZQ2AFRXMecIwzKRfOH_mbLwhX3d9f_vV0_jhr3zQ/formResponse" 
+                    method="POST" 
+                    target="hidden-iframe">
+                    
+                    <label for="guest_name">Nama Anda:</label>
+                    <input type="text" id="guest_name" name="entry.817112144" required placeholder="Contoh: Budi & Keluarga"> 
+                    
+                    <label for="attendance">Konfirmasi Kehadiran:</label>
+                    <select id="attendance" name="entry.1378431543" required>
+                        <option value="">-- Pilih --</option>
+                        <option value="Hadir">Saya/Kami akan Hadir</option>
+                        <option value="Tidak Hadir">Mohon Maaf, Tidak Bisa Hadir</option>
                     </select>
 
-                    <label for="message">A Note for the Couple: </label>
-                    <textarea id="message" name="message" placeholder="Write your wish....."></textarea>
+                    <label for="message">Pesan/Ucapan Indah:</label>
+                    <textarea id="message" name="entry.829280145" placeholder="Tuliskan ucapan dan doa terbaik Anda..."></textarea>
 
-                    <button type="submit" class="rsvp-submit-btn">SEND</button>
+                    <button type="submit" class="rsvp-submit-btn">KIRIM UCAPAN</button>
                     
                     <p class="message-success" id="rsvp-success-message">
-                        <i class="fas fa-check-circle"></i> SUCCESS!
+                        <i class="fas fa-check-circle"></i> Ucapan Anda berhasil terkirim dan tercatat!
                     </p>
                 </form>
+                <iframe name="hidden-iframe" id="hidden-iframe" style="display:none;"></iframe>
+                
+                <hr style="border-color: #eee; margin: 30px 0;">
+
+                <h3><i class="fas fa-scroll"></i> Ucapan & Doa Terbaik</h3>
+
+                <div id="guestbook-list">
+                    <p style="text-align: center;">Memuat ucapan...</p>
+                </div>
                 </div>
         </div>
         
@@ -546,6 +589,55 @@
             player.play();
         }
 
+        /* FUNGSI BARU: MENAMPILKAN UCAPAN TAMU (Guestbook) */
+        function loadGuestbook() {
+            const guestbookList = document.getElementById('guestbook-list');
+            guestbookList.innerHTML = '<p style="text-align: center;">Memuat ucapan...</p>';
+
+            /* ==========================================================
+                ⚠️ PERLU DIGANTI: INI HANYA DATA CONTOH (DUMMY DATA)
+                Untuk menampilkan data nyata, Anda perlu menggunakan SheetDB / Sheet2API 
+                untuk mengambil data dari Google Sheet Anda yang terisi.
+                ==========================================================
+            */
+            const realData = [
+                { name: "Siti Rahma & Keluarga", attendance: "Hadir", message: "Selamat menempuh hidup baru! Semoga Ovi & Vian selalu dalam lindungan Allah. Amin." },
+                { name: "Bapak Budi", attendance: "Tidak Hadir", message: "Mohon maaf tidak bisa hadir karena ada urusan mendadak. Doa terbaik dari jauh!" },
+                { name: "Wina", attendance: "Hadir", message: "Happy wedding! Jangan lupa mampir ke rumah ya :)" },
+            ];
+            
+            // Logika menampilkan data:
+            
+            // fetch('URL_API_GOOGLE_SHEET_ANDA') // <--- Uncomment ini jika API sudah siap
+            // .then(response => response.json())
+            // .then(data => { // Ganti 'data' ini dengan 'realData' untuk pengujian dummy
+            
+            guestbookList.innerHTML = ''; // Kosongkan pesan loading
+            
+            realData.forEach(item => {
+                // Tentukan ikon berdasarkan status kehadiran
+                const icon = item.attendance === 'Hadir' ? 
+                    '<span style="color: green;"><i class="fas fa-check-circle"></i> Hadir</span>' : 
+                    '<span style="color: red;"><i class="fas fa-times-circle"></i> Tidak Hadir</span>';
+
+                const itemHtml = `
+                    <div class="guestbook-item">
+                        <div class="name">
+                            ${item.name}
+                            <span class="attendance">${icon}</span>
+                        </div>
+                        <p class="message">"${item.message}"</p>
+                    </div>
+                `;
+                guestbookList.insertAdjacentHTML('beforeend', itemHtml);
+            });
+
+            // }) // Penutup dari .then(data => 
+            // .catch(error => {
+            //     guestbookList.innerHTML = '<p style="color: red; text-align: center;">Gagal memuat ucapan. Cek koneksi API Anda.</p>';
+            // });
+        }
+
 
         function setBackground(targetId) {
             if (targetId === 'profile') {
@@ -601,7 +693,13 @@
             if (targetSection) {
                 targetSection.style.display = 'block';
             }
-            
+
+            // PANGGIL FUNGSI GUESTBOOK HANYA KETIKA PINDAH KE HALAMAN RSVP
+                if (targetId === 'rsvp') {
+                    loadGuestbook(); 
+                }
+                
+            }
             const targetNavItem = document.querySelector(`.nav-item[data-target="${targetId}"]`);
             if (targetNavItem) {
                 targetNavItem.classList.add('active');
@@ -712,18 +810,26 @@
             imageBackground.style.display = 'block';
             
             // Logika untuk Form RSVP
+           // Logika baru untuk Form RSVP menggunakan Google Forms via Iframe
             const rsvpForm = document.getElementById('rsvp-form');
             const successMessage = document.getElementById('rsvp-success-message');
 
-            rsvpForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                successMessage.style.display = 'block';
-                
-                setTimeout(() => {
+            rsvpForm.addEventListener('submit', function() {
+                // Tampilkan pesan sukses dan kosongkan form setelah pengiriman berhasil
+                // Menggunakan setTimeout untuk memberi waktu agar data terkirim ke Google Form
+                setTimeout(function() {
+                    successMessage.style.display = 'block';
                     rsvpForm.reset();
-                    successMessage.style.display = 'none';
-                }, 2000);
+                    
+                    // Sembunyikan pesan sukses setelah 3 detik
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 3000);
+                    
+                    // Panggil fungsi untuk memuat ulang daftar ucapan
+                    // loadGuestbook(); // <--- Uncomment ini jika API sudah siap untuk refresh list
+                    
+                }, 500); // Penundaan kecil untuk memastikan pengiriman ke Google Forms
             });
         });
     </script>
