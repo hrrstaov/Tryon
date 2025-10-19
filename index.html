@@ -44,9 +44,6 @@
         .cover-card {
             background-color: #fffaf5; 
             
-            /* **PERUBAHAN DI SINI:** Tambahkan padding untuk ruang di sekeliling konten */
-            padding: 30px 20px; /* Padding atas/bawah 30px, kiri/kanan 20px */
-            
             border-radius: 20px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             position: relative;
@@ -55,16 +52,19 @@
             align-items: center;
             overflow: hidden; 
             
-            max-width: 350px; 
             width: 90%; 
-            margin: 0 20px; 
             box-sizing: border-box; 
+
+            padding: 20px;
+            margin: 80px auto 100px; 
+            max-width: 320px; 
+            
+            
         }
         
         /* STYLE GAMBAR ARTWORK */
         .cover-card img.cover-art {
-            /* **PERUBAHAN DI SINI:** Hapus margin vertikal, biarkan padding card yang bekerja */
-            max-width: 100%; /* Gunakan lebar penuh dari ruang yang tersisa (90% dari container) */
+            max-width: 100%; 
             height: auto;
             display: block;
             margin: 0 auto; 
@@ -72,12 +72,10 @@
 
         /* STYLE TOMBOL BUKA UNDANGAN (ORANGE) */
         #open-invitation-btn {
-            width: 100%; /* Gunakan lebar penuh dari ruang yang tersisa */
+            width: 100%; 
             padding: 12px 0; 
-            
-            /* **PERUBAHAN DI SINI:** Sesuaikan margin vertikal */
             margin-top: 20px; 
-            margin-bottom: 0; /* Hapus margin bawah karena sudah ada padding card */
+            margin-bottom: 0; 
             
             border: none;
             background-color: #ff9800; 
@@ -161,6 +159,7 @@
             align-items: center;
             z-index: 50;
             
+            /* **SOLUSI UTAMA:** Pastikan selalu tersembunyi secara default */
             opacity: 0;
             transform: translateY(100%); 
             pointer-events: none;
@@ -598,7 +597,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             var iframe = document.getElementById('vimeo-player');
             
-            hideNavbar();
+            // hideNavbar() di sini hanya sebagai penegas karena sudah ada CSS default
+            hideNavbar(); 
             
             if (iframe) {
                 player = new Vimeo.Player(iframe);
@@ -624,6 +624,7 @@
                     coverPage.style.display = 'none';
                     mainContent.style.display = 'block';
                     
+                    // Setelah dibuka, tampilkan section 'profile' dan otomatis tampilkan Navbar
                     showSection('profile'); 
                     
                 }, 1000);
@@ -661,6 +662,7 @@
                     const target = this.getAttribute('data-target');
                     
                     if(target === 'cover-page') {
+                        // Kembali ke halaman sampul (reload akan mengaktifkan CSS default navbar)
                         window.location.reload(); 
                         return;
                     }
@@ -700,8 +702,7 @@
             rsvpForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                // Di sini biasanya data akan dikirim ke server/Google Sheet.
-                // Karena ini hanya front-end, kita simulasikan sukses.
+                // Simulasikan sukses karena tanpa back-end
                 
                 // Tampilkan pesan sukses
                 successMessage.style.display = 'block';
