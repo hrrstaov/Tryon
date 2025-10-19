@@ -413,7 +413,7 @@
         
                     <p><strong>BANK CENTRAL ASIA (BCA)</strong></p>
                     <p id="rekening-ovi">2711574362</p>
-                    <button class="copy-btn" data-target="rekening-ovi">Salin No. Rekening</button>
+                    <button class="copy-btn" data-target="rekening-ovi">Copy Account Number</button>
                     <p>A.N. Herrista Ovilia</p>
                 </div>
                 
@@ -423,7 +423,7 @@
         
                     <p><strong>BANK MANDIRI</strong></p>
                     <p id="rekening-vian">1400023045769</p>
-                    <button class="copy-btn" data-target="rekening-vian">Salin No. Rekening</button>
+                    <button class="copy-btn" data-target="rekening-vian">Copy Account Number</button>
                     <p>A.N. Nanda Oktavian</p>
                 </div>
 
@@ -683,16 +683,16 @@
 
                     navigator.clipboard.writeText(textToCopy).then(() => {
                         const originalText = this.textContent;
-                        this.textContent = 'Berhasil Disalin!';
-                        this.style.backgroundColor = '#4CAF50';
+                        this.textContent = 'Success!';
+                        this.style.backgroundColor = '#3075A2';
                         
                         setTimeout(() => {
                             this.textContent = originalText;
                             this.style.backgroundColor = '#6a4c9c';
                         }, 1500);
                     }).catch(err => {
-                        console.error('Gagal menyalin teks: ', err);
-                        alert('Gagal menyalin nomor rekening. Silakan salin manual.');
+                        console.error('Failed Copy: ', err);
+                        alert('Failed to copy account number. Please copy manually.');
                     });
                 });
             });
