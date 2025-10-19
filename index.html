@@ -10,7 +10,7 @@
         /* CSS Dasar untuk Full Screen dan Reset */
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
             background-color: #f7f3ed;
         }
@@ -23,7 +23,7 @@
             width: 100%;
             height: 100%;
             display: flex;
-            flex-direction: column;
+            flex-direction: column; 
             justify-content: center;
             align-items: center;
             background-size: cover;
@@ -32,32 +32,50 @@
             color: #4b3e3e;
             z-index: 100;
             transition: opacity 1s ease-in-out;
-            /* **[GANTI INI]**: Sesuaikan dengan nama file gambar cover Anda (misal: 'cover-background.jpg') */
+            
+            /* **[GANTI INI]**: Sesuaikan dengan nama file gambar background gradien Anda */
             background-image: url('cover-background.jpg'); 
+            position: relative; 
         }
 
-        #cover-page h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
-            font-family: 'Brush Script MT', cursive; 
+        /* CONTAINER KARTU DI TENGAH (WADAH UNTUK GAMBAR DAN TOMBOL) */
+        .cover-card {
+            width: 90%;
+            max-width: 400px;
+            background-color: #fffaf5; /* Warna Kuning muda/putih */
+            padding: 0; 
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden; 
+        }
+        
+        /* STYLE GAMBAR ARTWORK (Nama, Tanggal, Foto Kartun) */
+        .cover-card img.cover-art {
+            width: 100%; 
+            height: auto;
+            display: block;
         }
 
-        #cover-page p {
-            font-size: 1.2em;
-            margin-top: 0;
-        }
-
+        /* STYLE TOMBOL BUKA UNDANGAN (ORANGE) */
         #open-invitation-btn {
-            padding: 10px 25px;
+            width: 80%; 
+            padding: 12px 0; 
+            margin-bottom: 20px; 
             border: none;
-            background-color: #6a4c9c;
-            color: white;
-            font-size: 1em;
-            border-radius: 5px;
+            background-color: #ff9800; /* Warna Orange */
+            color: #4b3e3e; /* Warna teks tombol (COKLAT/HITAM) */
+            font-size: 1.1em;
+            font-weight: 700;
+            border-radius: 10px; 
             cursor: pointer;
-            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(255, 152, 0, 0.5);
+            transition: background-color 0.3s;
         }
-
+        
         /* --- Konten Utama (Main Content) --- */
         #main-content {
             display: none;
@@ -73,7 +91,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: -2; /* Di bawah gambar background */
+            z-index: -2; 
             pointer-events: none;
             object-fit: cover; 
             overflow: hidden;
@@ -87,12 +105,11 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: -1; /* Di atas video, di bawah konten */
+            z-index: -1; 
             background-size: cover;
             background-position: center;
             display: none; 
-            /* **[GANTI INI]**: Sesuaikan dengan nama file gambar background untuk Acara/Kado */
-            background-image: url('background.jpg'); 
+            background-image: url('cover-background.jpg'); 
         }
 
         /* Kontrol Video (Floating Button) */
@@ -158,9 +175,9 @@
 
         /* --- Konten Section (Sistem Halaman) --- */
         .content-section {
-            min-height: calc(100vh - 60px); 
-            padding-top: 50px; 
-            padding-bottom: 70px; 
+            min-height: 100vh;
+            padding-top: 0; 
+            padding-bottom: 0; 
             box-sizing: border-box; 
             
             display: none; 
@@ -172,21 +189,18 @@
             text-align: center; 
         }
         
-        /* Style khusus untuk Profile: Pastikan tidak ada latar belakang sama sekali */
         #profile.content-section {
             background: transparent; 
-            /* Karena ini halaman profile, kita tidak perlu padding, biarkan video yang mengisi. */
-            padding-top: 0;
-            padding-bottom: 0;
         }
         
-        /* Konten di dalam section */
+        /* PERUBAHAN DI SINI UNTUK content-wrapper */
         .content-wrapper {
             padding: 20px;
-            margin: 0 auto;
-            max-width: 600px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
+            margin: 80px auto 100px; 
+            width: 90%; /* Menggunakan 90% lebar layar */
+            max-width: 380px; /* Lebar maksimal diperkecil */
+            background: rgba(255, 255, 255, 0.85); /* Putih semi-transparan */
+            border-radius: 15px; /* Sudut sedikit lebih bulat */
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             position: relative;
         }
@@ -211,11 +225,15 @@
 <body>
 
     <div id="cover-page">
-        <h1>Ovi & Vian</h1>
-        <p>Undangan Pernikahan</p>
-        <button id="open-invitation-btn">
-            <i class="fas fa-envelope-open-text"></i> Open Invitation
-        </button>
+        <div class="cover-card">
+            
+            <img src="cover-art.jpg" alt="The Wedding of Ovi & Vian" class="cover-art">
+            
+            <button id="open-invitation-btn">
+                BUKA UNDANGAN
+            </button>
+            
+        </div>
     </div>
 
     <div id="main-content">
@@ -232,7 +250,6 @@
 
         <div id="video-controls">
             <button id="toggle-video-btn"><i class="fas fa-play"></i></button>
-            
             <button id="toggle-mute-btn" style="margin-left: 10px;">
                 <i class="fas fa-volume-mute"></i>
             </button>
@@ -311,7 +328,7 @@
 
     <script src="https://player.vimeo.com/api/player.js"></script>
     <script>
-        var player; // Objek Vimeo Player
+        var player; 
         var playerStatus = 'paused';
         var navBar = document.getElementById('navigator-bar');
         var toggleBtn = document.getElementById('toggle-video-btn');
@@ -320,83 +337,15 @@
         const imageBackground = document.getElementById('image-background');
         const videoControls = document.getElementById('video-controls');
         
-        // Logika Mute/Unmute
         const toggleMuteBtn = document.getElementById('toggle-mute-btn');
         const muteIcon = toggleMuteBtn.querySelector('i');
         let isMuted = true; 
 
 
-        // --- FUNGSI KONTROL BACKGROUND DINAMIS ---
-        function setBackground(targetId) {
-            if (targetId === 'profile') {
-                // Tampilkan Video, Sembunyikan Gambar
-                videoPlayer.style.display = 'block';
-                imageBackground.style.display = 'none';
-                videoControls.style.display = 'flex'; // Tampilkan kontrol video
-                
-                // Pastikan video di-play
-                if (player && playerStatus !== 'playing') {
-                    player.play().catch(error => {
-                        console.log("Autoplay di Profile diblokir, menunggu interaksi pengguna.");
-                        playerStatus = 'paused';
-                        icon.className = 'fas fa-play';
-                    });
-                }
-            } else {
-                // Sembunyikan Video, Tampilkan Gambar
-                videoPlayer.style.display = 'none';
-                imageBackground.style.display = 'block';
-                videoControls.style.display = 'none'; // Sembunyikan kontrol video
-                
-                // Pastikan video di-pause saat keluar dari halaman profile
-                if (player && playerStatus === 'playing') {
-                    player.pause();
-                }
-            }
-        }
-
-        // --- FUNGSI TAMPILAN HALAMAN ---
-        function showSection(targetId) {
-            const sections = document.querySelectorAll('.content-section');
-            const navItems = document.querySelectorAll('.nav-item');
-
-            // 1. Ganti Background (dan Play/Pause Video)
-            setBackground(targetId);
-
-            // 2. Sembunyikan semua section
-            sections.forEach(section => {
-                section.style.display = 'none';
-            });
-            
-            // 3. Hapus status active dari semua nav item
-            navItems.forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            // 4. Tampilkan section yang ditargetkan
-            const targetSection = document.getElementById(targetId);
-            if (targetSection) {
-                targetSection.style.display = 'block';
-            }
-            
-            // 5. Set status active pada nav item yang sesuai
-            const targetNavItem = document.querySelector(`.nav-item[data-target="${targetId}"]`);
-            if (targetNavItem) {
-                targetNavItem.classList.add('active');
-            }
-            
-            // 6. Gulir ke atas halaman
-            document.getElementById('main-content').scrollTop = 0;
-            document.body.scrollTop = 0;
-            document.documentElement.scrollTop = 0;
-        }
-
-
-        // Callbacks untuk Vimeo
         function onPlayerPlay() {
             playerStatus = 'playing';
             icon.className = 'fas fa-pause';
-            navBar.classList.add('navbar-hidden');
+            navBar.classList.add('navbar-hidden'); 
         }
 
         function onPlayerPause() {
@@ -410,27 +359,82 @@
             player.play();
         }
 
-        // Inisialisasi Player Vimeo setelah DOM siap
+
+        function setBackground(targetId) {
+            if (targetId === 'profile') {
+                videoPlayer.style.display = 'block';
+                imageBackground.style.display = 'none';
+                videoControls.style.display = 'flex'; 
+                
+                navBar.classList.add('navbar-hidden');
+                
+                if (player && playerStatus !== 'playing') {
+                    player.play().catch(error => {
+                        console.log("Autoplay di Profile diblokir, menunggu interaksi pengguna.");
+                        playerStatus = 'paused';
+                        icon.className = 'fas fa-play';
+                        navBar.classList.remove('navbar-hidden');
+                    });
+                }
+            } else {
+                videoPlayer.style.display = 'none';
+                imageBackground.style.display = 'block';
+                videoControls.style.display = 'none'; 
+                
+                navBar.classList.remove('navbar-hidden');
+                
+                if (player && playerStatus === 'playing') {
+                    player.pause();
+                }
+            }
+        }
+
+        function showSection(targetId) {
+            const sections = document.querySelectorAll('.content-section');
+            const navItems = document.querySelectorAll('.nav-item');
+
+            setBackground(targetId);
+
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+            
+            const targetNavItem = document.querySelector(`.nav-item[data-target="${targetId}"]`);
+            if (targetNavItem) {
+                targetNavItem.classList.add('active');
+            }
+            
+            document.getElementById('main-content').scrollTop = 0;
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+
+
         document.addEventListener('DOMContentLoaded', function() {
             var iframe = document.getElementById('vimeo-player');
             
-            // Inisialisasi Vimeo Player
             if (iframe) {
                 player = new Vimeo.Player(iframe);
                 
                 player.ready().then(function() {
-                    // Set status awal ke Paused dan Muted
                     onPlayerPause(); 
                     player.setVolume(0); 
 
-                    // Tambahkan event listeners
                     player.on('play', onPlayerPlay);
                     player.on('pause', onPlayerPause);
                     player.on('ended', onPlayerEnded);
                 });
             }
 
-            // Logika Tombol Buka Undangan
             document.getElementById('open-invitation-btn').addEventListener('click', function() {
                 var coverPage = document.getElementById('cover-page');
                 var mainContent = document.getElementById('main-content');
@@ -441,22 +445,24 @@
                     coverPage.style.display = 'none';
                     mainContent.style.display = 'block';
                     
-                    // Tampilkan section pertama ('detail') dan set background gambar
-                    showSection('profile');
+                    showSection('profile'); 
                     
                 }, 1000);
             });
 
-            // Kontrol Video Pause/Play
             toggleBtn.addEventListener('click', function() {
                 if (playerStatus === 'playing') {
                     player.pause();
                 } else {
                     player.play();
+                    if(isMuted) {
+                        player.setVolume(1); 
+                        muteIcon.className = 'fas fa-volume-up';
+                        isMuted = false;
+                    }
                 }
             });
             
-            // Logika Kontrol Mute/Unmute
             toggleMuteBtn.addEventListener('click', function() {
                 if (isMuted) {
                     player.setVolume(1); 
@@ -469,7 +475,6 @@
                 }
             });
 
-            // --- Logika Navigator Bar (Sistem Halaman) ---
             document.querySelectorAll('#navigator-bar a[data-target]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -477,17 +482,14 @@
                     const target = this.getAttribute('data-target');
                     
                     if(target === 'cover-page') {
-                        // Kebutuhan 1: Kembali ke halaman "Buka Undangan" (dengan refresh)
                         window.location.reload(); 
                         return;
                     }
                     
-                    // Tampilkan halaman dan atur background
                     showSection(target);
                 });
             });
 
-            // --- Logika Salin Nomor Rekening ---
             document.querySelectorAll('.copy-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const targetId = this.getAttribute('data-target');
@@ -510,7 +512,6 @@
                 });
             });
             
-            // Inisialisasi awal (set background gambar secara default)
             imageBackground.style.display = 'block';
         });
     </script>
