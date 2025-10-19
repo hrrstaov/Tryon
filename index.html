@@ -486,7 +486,7 @@
                     <select id="attendance" name="entry.1378431543" required>
                         <option value="">-- Pilih --</option>
                         <option value="Hadir">Saya/Kami akan Hadir</option>
-                        <option value="Tidak Hadir">Mohon Maaf, Tidak Bisa Hadir</option>
+                        <option value="Tidak hadir">Mohon Maaf, Tidak Bisa Hadir</option>
                     </select>
 
                     <label for="message">Pesan/Ucapan Indah:</label>
@@ -813,41 +813,56 @@
             });
             
             imageBackground.style.display = 'block';
-            
-          // Logika untuk Form RSVP (Google Form via Iframe)
-            const rsvpForm = document.getElementById('rsvp-form');
-            const successMessage = document.getElementById('rsvp-success-message');
+           // Logika untuk Form RSVP (Google Form via Fetch/AJAX)
+const rsvpForm = document.getElementById('rsvp-form');
+const successMessage = document.getElementById('rsvp-success-message');
 
-            // 👇 GANTI EVENT LISTENER LAMA DENGAN INI 👇
-            rsvpForm.addEventListener('submit', function(e) { // Tambahkan 'e' untuk event
-                
-                e.preventDefault(); // 👈 KOREKSI UTAMA: Menghentikan halaman me-refresh
+rsvpForm.addEventListener('submit', function(e) { 
+    
+    e.preventDefault(); // Menghentikan pengiriman form default
 
-                const formData = new FormData(rsvpForm);
-                const actionUrl = rsvpForm.action;
-                
-                // Secara teknis, karena form menggunakan method="POST" dan target="hidden-iframe",
-                // pengiriman form secara native akan terjadi di sini:
-                rsvpForm.submit();
-                
-                // Beri jeda 500ms agar Google Form merespons
-                setTimeout(function() {
-                    successMessage.style.display = 'block';
-                    rsvpForm.reset();
-                    
-                    // Sembunyikan pesan sukses setelah 3 detik
-                    setTimeout(() => {
-                        successMessage.style.display = 'none';
-                    }, 3000);
-                    
-                    // Muat ulang guestbook setelah submit
-                    // Cek apakah section RSVP sedang aktif sebelum memuat ulang
-                    if (document.getElementById('rsvp').style.display === 'block') {
-                        loadGuestbook(); 
-                    }
-                    
-                }, 500); 
-            });
+    // Ambil URL Action dari form
+    const actionUrl = rsvpForm.action;
+    
+    // Ambil data form
+    const formData = new FormData(rsvpForm);
+
+    // Tampilkan tombol loading atau nonaktifkan tombol submit (Opsional)
+    const submitBtn = rsvpForm.querySelector('.rsvp-submit-btn');
+    submitBtn.textContent = 'Mengirim...';
+    submitBtn.disabled = true;
+
+    // Lakukan pengiriman data ke Google Form menggunakan fetch
+    fetch(actionUrl, {
+        method: 'POST',
+        body: formData,
+        mode: 'no-cors' // Penting untuk Google Form
+    })
+    .then(() => {
+        // Jika berhasil, tampilkan pesan sukses
+        successMessage.style.display = 'block';
+        rsvpForm.reset();
+        submitBtn.textContent = 'KIRIM UCAPAN';
+        submitBtn.disabled = false;
+
+        // Sembunyikan pesan sukses
+        setTimeout(() => {
+            successMessage.style.display = 'none';
+        }, 3000);
+
+        // Muat ulang guestbook
+        if (document.getElementById('rsvp').style.display === 'block') {
+            loadGuestbook(); 
+        }
+
+    })
+    .catch(error => {
+        console.error('Error submitting form:', error);
+        alert('Gagal mengirim ucapan. Silakan coba lagi. (Cek Console untuk detail)');
+        submitBtn.textContent = 'KIRIM UCAPAN';
+        submitBtn.disabled = false;
+    });
+});
         });
     </script>
 
