@@ -584,56 +584,58 @@
             player.play();
         }
 
-        /* FUNGSI BARU: MENAMPILKAN UCAPAN TAMU (Guestbook) */
+        /* FUNGSI UNTUK MENAMPILKAN UCAPAN NYATA DARI GOOGLE SHEET */
         function loadGuestbook() {
-            // Jika sudah dimuat dan bukan saat refresh, lewati
-            if (isGuestbookLoaded) {
-                console.log("Guestbook sudah dimuat, dilewati.");
-                return;
-            }
-
             const guestbookList = document.getElementById('guestbook-list');
             guestbookList.innerHTML = '<p style="text-align: center;">Memuat ucapan...</p>';
 
-            /* ==========================================================
-                ⚠️ GANTI DENGAN KODE API NYATA (SheetDB/Sheet2API) DI SINI
-               ==========================================================
-            */
-            const realData = [
-                { name: "Siti Rahma & Keluarga", attendance: "Hadir", message: "Selamat menempuh hidup baru! Semoga Ovi & Vian selalu dalam lindungan Allah. Amin." },
-                { name: "Bapak Budi", attendance: "Tidak Hadir", message: "Mohon maaf tidak bisa hadir karena ada urusan mendadak. Doa terbaik dari jauh!" },
-                { name: "Wina", attendance: "Hadir", message: "Happy wedding! Jangan lupa mampir ke rumah ya :)" },
-            ];
-            
-            // fetch('URL_API_GOOGLE_SHEET_ANDA') 
-            // .then(response => response.json())
-            // .then(data => { 
-            
-            guestbookList.innerHTML = '';
-            
-            // Gunakan 'realData' untuk pengujian dummy
-            realData.forEach(item => { 
-                const icon = item.attendance === 'Hadir' ? 
-                    '<span style="color: green;"><i class="fas fa-check-circle"></i> Hadir</span>' : 
-                    '<span style="color: red;"><i class="fas fa-times-circle"></i> Tidak Hadir</span>';
+            // ⚠️ GANTI DENGAN API URL SHEETDB/SHEET2API ANDA DI SINI!
+            const API_URL = 'https://sheetdb.io/api/v1/0wlvsc7j5h03l';
 
-                const itemHtml = `
-                    <div class="guestbook-item">
-                        <div class="name">
-                            ${item.name}
-                            <span class="attendance">${icon}</span>
-                        </div>
-                        <p class="message">"${item.message}"</p>
-                    </div>
-                `;
-                guestbookList.insertAdjacentHTML('beforeend', itemHtml);
-            });
-            
-            isGuestbookLoaded = true; // Set flag setelah selesai
-            // }) 
-            // .catch(error => {
-            //     guestbookList.innerHTML = '<p style="color: red; text-align: center;">Gagal memuat ucapan. Cek koneksi API Anda.</p>';
-            // });
+            fetch(API_URL) 
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Gagal memuat data: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    guestbookList.innerHTML = ''; // Kosongkan pesan loading
+                    
+                    if (data.length === 0) {
+                        guestbookList.innerHTML = '<p style="text-align: center; color: #666;">Belum ada ucapan. Jadilah yang pertama!</p>';
+                        return;
+                    }
+                    
+                    // Kita asumsikan data yang paling bawah (terbaru) adalah ucapan yang paling baru masuk.
+                    // Jika SheetDB mengembalikan yang terbaru di bawah, gunakan .reverse()
+                    data.reverse().forEach(item => { 
+                        
+                        // ⚠️ PASTIKAN item.Nama, item.Kehadiran, item.Pesan SAMA dengan NAMA KOLOM di Google Sheet Anda
+                        const guestName = item.Nama_Anda || item.Nama; // Ganti 'Nama_Anda' jika nama kolom berbeda
+                        const attendanceStatus = item.Konfirmasi_Kehadiran; // Ganti jika nama kolom berbeda
+                        const messageText = item.Pesan_Ucapan_Indah || item.Pesan; // Ganti jika nama kolom berbeda
+                        
+                        const icon = attendanceStatus === 'Hadir' ? 
+                            '<span style="color: green;"><i class="fas fa-check-circle"></i> Hadir</span>' : 
+                            '<span style="color: red;"><i class="fas fa-times-circle"></i> Tidak Hadir</span>';
+
+                        const itemHtml = `
+                            <div class="guestbook-item">
+                                <div class="name">
+                                    ${guestName}
+                                    <span class="attendance">${icon}</span>
+                                </div>
+                                <p class="message">"${messageText}"</p>
+                            </div>
+                        `;
+                        guestbookList.insertAdjacentHTML('beforeend', itemHtml);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching guestbook:", error);
+                    guestbookList.innerHTML = '<p style="color: red; text-align: center;">Gagal memuat ucapan. Silakan cek koneksi API Anda.</p>';
+                });
         }
 
 
