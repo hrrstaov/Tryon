@@ -39,7 +39,6 @@
         #cover-page h1 {
             font-size: 3em;
             margin-bottom: 10px;
-            /* Sesuaikan Font dengan tulisan tangan yang Anda suka */
             font-family: 'Brush Script MT', cursive; 
         }
 
@@ -140,7 +139,6 @@
             padding: 20px;
             margin: 20px auto;
             max-width: 600px;
-            /* Latar belakang semi-transparan agar video tetap terlihat di belakang */
             background: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -178,7 +176,7 @@
         
         <iframe 
             id="youtube-player" 
-            src="https://www.youtube.com/embed/UI86l8Asjg8?autoplay=0&controls=0&mute=1&disablekb=1&modestbranding=1&enablejsapi=1&playsinline=1" 
+            src="https://www.youtube.com/embed/9-Kd9WLdiSE?playlist=9-Kd9WLdiSE&autoplay=0&controls=0&mute=1&disablekb=1&modestbranding=1&enablejsapi=1&playsinline=1" 
             frameborder="0" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
             allowfullscreen>
@@ -293,7 +291,7 @@
                 navBar.classList.add('navbar-hidden'); 
 
             } else if (event.data == YT.PlayerState.ENDED) {
-                // Video Selesai: Putar ulang untuk looping (penting untuk Shorts)
+                // Video Selesai: Putar ulang untuk looping
                 player.seekTo(0); 
                 player.playVideo(); 
                 
