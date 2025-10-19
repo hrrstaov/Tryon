@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <style>
-        /* FONT IMPORT (Gunakan jika Anda ingin font spesifik) */
+        /* FONT IMPORT */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
         /* CSS Dasar untuk Full Screen dan Reset */
@@ -36,17 +36,14 @@
             z-index: 100;
             transition: opacity 1s ease-in-out;
             
-            /* **[GANTI INI]**: Sesuaikan dengan nama file gambar background gradien Anda */
             background-image: url('cover-background.jpg'); 
             position: relative; 
         }
 
         /* CONTAINER KARTU DI TENGAH */
         .cover-card {
-            width: 90%;
-            max-width: 400px;
             background-color: #fffaf5; 
-            padding: 0; 
+            padding: 20px 0; 
             border-radius: 20px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             position: relative;
@@ -54,22 +51,28 @@
             flex-direction: column;
             align-items: center;
             overflow: hidden; 
+            
+            max-width: 350px; 
+            margin: 0 20px; 
+            box-sizing: border-box; 
         }
         
         /* STYLE GAMBAR ARTWORK */
         .cover-card img.cover-art {
-            width: 100%; 
+            max-width: 90%; 
             height: auto;
             display: block;
+            margin: 0 auto; 
         }
 
         /* STYLE TOMBOL BUKA UNDANGAN (ORANGE) */
         #open-invitation-btn {
             width: 80%; 
             padding: 12px 0; 
-            margin-bottom: 20px; 
+            margin-top: 20px; 
+            margin-bottom: 0; 
             border: none;
-            background-color: #ff9800; /* Warna Orange */
+            background-color: #ff9800; 
             color: #4b3e3e; 
             font-size: 1.1em;
             font-weight: 700;
@@ -150,24 +153,13 @@
             align-items: center;
             z-index: 50;
             
+            /* **PERUBAHAN DI SINI:** Default tersembunyi, transisi dikontrol oleh JS */
             opacity: 0;
             transform: translateY(100%); 
             pointer-events: none;
             transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; 
         }
         
-        .navbar-visible {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-        
-        .navbar-hidden {
-            opacity: 0;
-            transform: translateY(100%);
-            pointer-events: none;
-        }
-
         .nav-item {
             display: flex;
             flex-direction: column;
@@ -247,7 +239,7 @@
             margin-bottom: 15px;
         }
 
-        /* --- Gaya Baru untuk Halaman Acara --- */
+        /* --- Gaya untuk Halaman Acara --- */
         img.event-location-photo {
             max-width: 100%; 
             height: auto;
@@ -258,18 +250,18 @@
 
         .event-button-container {
             display: flex;
-            flex-wrap: wrap; /* Agar tombol bisa pindah baris jika terlalu banyak */
+            flex-wrap: wrap; 
             justify-content: center;
-            gap: 10px; /* Jarak antar tombol */
+            gap: 10px; 
             margin-top: 20px;
         }
 
         .event-button {
-            display: inline-flex; /* Menggunakan flex untuk icon dan teks */
+            display: inline-flex; 
             align-items: center;
             justify-content: center;
             padding: 10px 15px;
-            background-color: #6a4c9c; /* Warna ungu */
+            background-color: #6a4c9c; 
             color: white;
             text-decoration: none;
             border-radius: 8px;
@@ -293,10 +285,10 @@
     <div id="cover-page">
         <div class="cover-card">
             
-            <img src="cover-art.png" alt="The Wedding of" class="cover-art">
+            <img src="cover-art.jpg" alt="The Wedding of Ovi & Vian" class="cover-art">
             
             <button id="open-invitation-btn">
-                Open Invitation
+                BUKA UNDANGAN
             </button>
             
         </div>
@@ -343,7 +335,7 @@
                 <p>Gedung Serbaguna Indah, Kota Bahagia</p>
 
                 <div class="event-button-container">
-                    <a href="https://maps.app.goo.gl/LJpUSA2HvECGZPk98?g_st=ipc" target="_blank" class="event-button">
+                    <a href="https://maps.app.goo.gl/YourGoogleMapsLinkHere" target="_blank" class="event-button">
                         <i class="fas fa-map-marker-alt"></i> Google Maps
                     </a>
                     
@@ -435,18 +427,32 @@
         let isMuted = true; 
 
 
+        /* Fungsi untuk MENAMPILKAN Navbar */
+        function showNavbar() {
+            navBar.style.opacity = '1';
+            navBar.style.transform = 'translateY(0)';
+            navBar.style.pointerEvents = 'auto';
+        }
+
+        /* Fungsi untuk MENYEMBUNYIKAN Navbar */
+        function hideNavbar() {
+            navBar.style.opacity = '0';
+            navBar.style.transform = 'translateY(100%)';
+            navBar.style.pointerEvents = 'none';
+        }
+
         function onPlayerPlay() {
             playerStatus = 'playing';
             icon.className = 'fas fa-pause';
-            navBar.classList.remove('navbar-visible'); 
-            navBar.classList.add('navbar-hidden'); 
+            // Sembunyikan navbar saat video play di halaman Profile
+            hideNavbar(); 
         }
 
         function onPlayerPause() {
             playerStatus = 'paused';
             icon.className = 'fas fa-play';
-            navBar.classList.remove('navbar-hidden'); 
-            navBar.classList.add('navbar-visible'); 
+            // Tampilkan navbar saat video pause di halaman Profile
+            showNavbar(); 
         }
 
         function onPlayerEnded() {
@@ -461,25 +467,29 @@
                 imageBackground.style.display = 'none';
                 videoControls.style.display = 'flex'; 
                 
-                navBar.classList.remove('navbar-visible');
-                navBar.classList.add('navbar-hidden');
-                
+                // Coba putar video
                 if (player && playerStatus !== 'playing') {
-                    player.play().catch(error => {
+                    player.play().then(() => {
+                        // Jika berhasil play, navbar akan disembunyikan oleh onPlayerPlay
+                    }).catch(error => {
                         console.log("Autoplay di Profile diblokir, menunggu interaksi pengguna.");
                         playerStatus = 'paused';
                         icon.className = 'fas fa-play';
-                        navBar.classList.add('navbar-visible'); 
-                        navBar.classList.remove('navbar-hidden');
+                        // Jika diblokir (paused), tampilkan navbar
+                        showNavbar(); 
                     });
+                } else if (playerStatus === 'playing') {
+                     hideNavbar(); // Jika sudah play (dari tab lain ke profile)
+                } else {
+                     showNavbar(); // Jika sudah paused
                 }
             } else {
                 videoPlayer.style.display = 'none';
                 imageBackground.style.display = 'block';
                 videoControls.style.display = 'none'; 
                 
-                navBar.classList.remove('navbar-hidden');
-                navBar.classList.add('navbar-visible'); 
+                // Selalu tampilkan navbar di halaman selain Profile
+                showNavbar(); 
                 
                 if (player && playerStatus === 'playing') {
                     player.pause();
@@ -520,7 +530,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             var iframe = document.getElementById('vimeo-player');
             
-            navBar.classList.add('navbar-hidden');
+            // Sembunyikan navbar di awal loading (di cover page)
+            hideNavbar();
             
             if (iframe) {
                 player = new Vimeo.Player(iframe);
@@ -546,11 +557,10 @@
                     coverPage.style.display = 'none';
                     mainContent.style.display = 'block';
                     
+                    // Pindah ke Profile dan mencoba putar video
                     showSection('profile'); 
                     
-                    if (playerStatus !== 'playing') {
-                        navBar.classList.add('navbar-visible');
-                    }
+                    // showNavbar() akan dipanggil oleh setBackground/onPlayerPause jika autoplay gagal
                     
                 }, 1000);
             });
