@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Pernikahan Ovi & Vian</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        /* CSS Dasar untuk Full Screen dan Reset */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            background-color: #f7f3ed;
+        }
+        
+        /* --- Halaman Depan (Cover Page) --- */
+        #cover-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            color: #4b3e3e;
+            z-index: 100;
+            transition: opacity 1s ease-in-out;
+            /* Ganti dengan gambar background Anda */
+            background-image: url('background.jpg'); 
+        }
+
+        #cover-page h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            font-family: 'Brush Script MT', cursive; 
+        }
+
+        #cover-page p {
+            font-size: 1.2em;
+            margin-top: 0;
+        }
+
+        #open-invitation-btn {
+            padding: 10px 25px;
+            border: none;
+            background-color: #6a4c9c;
+            color: white;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        /* --- Konten Utama (Main Content) --- */
+        #main-content {
+            padding-bottom: 60px;
+            display: none;
+            min-height: 100vh;
+            text-align: center;
+            position: relative; 
+        }
+        
+        /* YouTube Player sebagai Background */
+        #youtube-player {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* Tombol Pause/Play Video (Floating Button) */
+        #video-controls {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 51; /* Harus lebih tinggi dari navbar */
+            transition: opacity 0.3s;
+        }
+        
+        #video-controls button {
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        /* --- Navigator Bar (Bottom Menu) --- */
+        #navigator-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background-color: #ffffff;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 50;
+            /* Tambahkan transisi agar animasi hide/show lebih halus */
+            transition: transform 0.3s ease-in-out; 
+            transform: translateY(0); /* Default: terlihat */
+        }
+        
+        /* Class CSS untuk menyembunyikan navbar */
+        .navbar-hidden {
+            transform: translateY(100%);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #6a4c9c;
+            font-size: 0.7em;
+            text-decoration: none;
+        }
+
+        .nav-item i {
+            font-size: 1.5em;
+            margin-bottom: 2px;
+        }
+
+        /* Konten Undangan yang muncul di atas video */
+        .content-section {
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        /* Gaya Tombol Copy */
+        .copy-btn {
+            background-color: #6a4c9c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s;
+        }
+        .bank-info {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cover-page">
+        <h1>Ovi & Vian</h1>
+        <p>Undangan Pernikahan</p>
+        <button id="open-invitation-btn">
+            <i class="fas fa-envelope-open-text"></i> Buka Undangan
+        </button>
+    </div>
+
+    <div id="main-content">
+        
+        <iframe 
+            id="youtube-player" 
+            src="https://www.youtube.com/embed/UI86l8Asjg8?autoplay=1&loop=1&playlist=VIDEO_ID_ANDA&controls=0&mute=1&disablekb=1&modestbranding=1&enablejsapi=1"
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
+
+        <div id="video-controls">
+            <button id="toggle-video-btn"><i class="fas fa-pause"></i></button>
+        </div>
+
+        <div class="content-section" id="detail">
+            <h2>Detail Acara</h2>
+            <p>Informasi lokasi, tanggal, dan waktu.</p>
+        </div>
+        
+        <div class="content-section" id="galeri">
+            <h2>Galeri Foto</h2>
+            <p>Tempat foto-foto Anda berdua.</p>
+        </div>
+        
+        <div class="content-section" id="kado">
+            <h2><i class="fas fa-gift"></i> Kirim Hadiah & Tanda Kasih</h2>
+            <p>Doa restu Anda adalah karunia yang tak ternilai. Namun, jika Anda ingin memberikan hadiah sebagai bentuk tanda kasih, kami telah menyediakan layanan transfer digital.</p>
+            
+            <hr style="border-color: #6a4c9c; margin: 20px 0;">
+
+            <div class="bank-info">
+                <h3>Untuk Ovi</h3>
+                <p><strong>BANK CENTRAL ASIA (BCA)</strong></p>
+                <p id="rekening-ovi">8910xxxxxx</p>
+                <button class="copy-btn" data-target="rekening-ovi">Salin No. Rekening</button>
+                <p>A.N. Ovi Damayanti</p>
+            </div>
+            
+            <hr style="border-color: #eee; margin: 15px 0;">
+
+            <div class="bank-info">
+                <h3>Untuk Vian</h3>
+                <p><strong>BANK MANDIRI</strong></p>
+                <p id="rekening-vian">13700xxxxxx</p>
+                 <button class="copy-btn" data-target="rekening-vian">Salin No. Rekening</button>
+                <p>A.N. Vian Pradipta</p>
+            </div>
+
+            <p style="font-size: 0.8em; margin-top: 25px;">Mohon konfirmasi setelah transfer agar kami dapat mencatatnya. Terima kasih banyak!</p>
+        </div>
+        
+        <div class="content-section" id="rsvp">
+            <h2>RSVP & Ucapan</h2>
+            <p>Formulir kehadiran dan ucapan dari tamu.</p>
+        </div>
+        
+    </div>
+
+    <div id="navigator-bar" class="navbar-hidden">
+        <a href="#cover-page" class="nav-item">
+            <i class="fas fa-envelope"></i>
+            <span>Undangan</span>
+        </a>
+        <a href="#profile" class="nav-item">
+            <i class="fas fa-heart"></i>
+            <span>Profile</span>
+        </a>
+        <a href="#detail" class="nav-item">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Acara</span>
+        </a>
+        <a href="#galeri" class="nav-item">
+            <i class="fas fa-camera"></i>
+            <span>Galeri</span>
+        </a>
+        <a href="#kado" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Kado</span>
+        </a>
+    </div>
+
+    <script>
+        // Memuat YouTube Player API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        var playerStatus = 'paused';
+        var navBar = document.getElementById('navigator-bar');
+
+        // Fungsi yang dipanggil saat YouTube API siap
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+        
+        // Fungsi untuk memulai video (dipanggil setelah API siap)
+        function onPlayerReady(event) {
+            // Video diset untuk paused di awal.
+            // Kita akan play manual setelah tombol "Buka Undangan" diklik.
+            // Navbar diatur tersembunyi secara default di HTML, namun kita tampilkan jika video paused
+            navBar.classList.remove('navbar-hidden');
+        }
+
+
+        // Fungsi untuk melacak status player dan mengontrol navbar
+        function onPlayerStateChange(event) {
+            var toggleBtn = document.getElementById('toggle-video-btn');
+            var icon = toggleBtn.querySelector('i');
+
+            if (event.data == YT.PlayerState.PLAYING) {
+                // Video sedang berjalan: Sembunyikan Navbar
+                playerStatus = 'playing';
+                icon.className = 'fas fa-pause';
+                navBar.classList.add('navbar-hidden'); 
+
+            } else {
+                // Video sedang berhenti (PAUSED, ENDED, BUFFERING): Tampilkan Navbar
+                playerStatus = 'paused';
+                icon.className = 'fas fa-play';
+                navBar.classList.remove('navbar-hidden');
+            }
+        }
+
+        // Logika Tombol Buka Undangan
+        document.getElementById('open-invitation-btn').addEventListener('click', function() {
+            var coverPage = document.getElementById('cover-page');
+            var mainContent = document.getElementById('main-content');
+
+            coverPage.style.opacity = '0';
+            
+            setTimeout(function() {
+                coverPage.style.display = 'none';
+                mainContent.style.display = 'block';
+                
+                // Mulai Video dan Sembunyikan Navbar
+                if (player && player.playVideo) {
+                    player.playVideo();
+                }
+            }, 1000);
+        });
+
+        // Kontrol Video Pause/Play
+        document.getElementById('toggle-video-btn').addEventListener('click', function() {
+            if (playerStatus === 'playing') {
+                player.pauseVideo();
+            } else {
+                player.playVideo();
+            }
+        });
+        
+        // --- Logika Salin Nomor Rekening ---
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const elementToCopy = document.getElementById(targetId);
+                const textToCopy = elementToCopy.textContent || elementToCopy.innerText;
+
+                // Salin teks ke clipboard
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    // Beri umpan balik ke pengguna
+                    const originalText = this.textContent;
+                    this.textContent = 'Berhasil Disalin!';
+                    this.style.backgroundColor = '#4CAF50';
+                    
+                    // Kembalikan teks tombol setelah beberapa saat
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                        this.style.backgroundColor = '#6a4c9c';
+                    }, 1500);
+                }).catch(err => {
+                    console.error('Gagal menyalin teks: ', err);
+                    alert('Gagal menyalin nomor rekening. Silakan salin manual.');
+                });
+            });
+        });
+        
+        // Fungsi untuk Smooth Scrolling pada Navigator Bar (Opsional)
+        document.querySelectorAll('#navigator-bar a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
