@@ -155,7 +155,7 @@
             align-items: center;
             z-index: 50;
             
-            /* Pastikan tersembunyi secara default */
+            /* Sembunyikan secara default untuk halaman cover */
             opacity: 0;
             transform: translateY(100%); 
             pointer-events: none;
@@ -202,10 +202,10 @@
             background: transparent; 
         }
         
-        /* CONTENT WRAPPER - Mirip dengan Cover Card sekarang */
+        /* CONTENT WRAPPER */
         .content-wrapper {
             padding: 20px;
-            margin: 80px auto 100px; 
+            margin: 80px auto 100px; /* Jarak atas 80px, bawah 100px agar tidak tertutup navbar */
             width: 90%; 
             max-width: 320px; 
             background: rgba(255, 255, 255, 0.85); 
@@ -326,7 +326,7 @@
     <div id="cover-page">
         <div class="cover-card">
             
-            <img src="cover-art.jpg" alt="The Wedding of Ovi & Vian" class="cover-art">
+            <img src="cover-art.png" alt="The Wedding of Ovi & Vian" class="cover-art">
             
             <button id="open-invitation-btn">
                 BUKA UNDANGAN
@@ -491,7 +491,7 @@
         let isMuted = true; 
 
 
-        /* Fungsi untuk MENAMPILKAN Navbar */
+        /* Fungsi untuk MENAMPILKAN Navbar (Hanya untuk halaman konten) */
         function showNavbar() {
             navBar.style.visibility = 'visible'; 
             navBar.style.opacity = '1';
@@ -499,7 +499,7 @@
             navBar.style.pointerEvents = 'auto';
         }
 
-        /* Fungsi untuk MENYEMBUNYIKAN Navbar */
+        /* Fungsi untuk MENYEMBUNYIKAN Navbar (Hanya untuk halaman sampul) */
         function hideNavbar() {
             navBar.style.opacity = '0';
             navBar.style.transform = 'translateY(100%)';
@@ -509,16 +509,15 @@
             }, 300); 
         }
 
+        // Tidak lagi memanggil hideNavbar/showNavbar di sini
         function onPlayerPlay() {
             playerStatus = 'playing';
             icon.className = 'fas fa-pause';
-            hideNavbar(); // Sembunyikan navbar saat video putar
         }
 
         function onPlayerPause() {
             playerStatus = 'paused';
             icon.className = 'fas fa-play';
-            showNavbar(); // Tampilkan navbar saat video jeda
         }
 
         function onPlayerEnded() {
@@ -533,44 +532,44 @@
                 imageBackground.style.display = 'none';
                 videoControls.style.display = 'flex'; 
                 
-                // **PERUBAHAN KRITIS DI SINI**
-                // Panggil showNavbar() lebih awal untuk memastikan navbar muncul
-                // saat masuk ke profile jika video belum play (autoplay diblokir)
-                if (playerStatus !== 'playing') {
-                     showNavbar(); 
-                }
-                
+                // Coba putar video di halaman profile
                 if (player && playerStatus !== 'playing') {
-                    player.play().then(() => {
-                        // Jika berhasil play, onPlayerPlay akan hideNavbar()
-                    }).catch(error => {
-                        console.log("Autoplay di Profile diblokir.");
-                        playerStatus = 'paused';
-                        icon.className = 'fas fa-play';
-                        // Navbar sudah ditampilkan di atas.
+                    player.play().catch(error => {
+                        console.log("Autoplay diblokir.");
                     });
-                } else if (playerStatus === 'playing') {
-                     hideNavbar(); // Jika sudah playing dari halaman sebelumnya, sembunyikan.
                 } 
                 
+                // Navbar TETAP MUNCUL di profile
+                showNavbar(); 
+
             } else {
-                // Semua halaman lain
                 videoPlayer.style.display = 'none';
                 imageBackground.style.display = 'block';
                 videoControls.style.display = 'none'; 
                 
-                showNavbar(); // Pastikan navbar muncul di halaman non-profile/non-cover
-                
+                // Pastikan video pause saat pindah
                 if (player && playerStatus === 'playing') {
                     player.pause();
                 }
+                
+                // Navbar TETAP MUNCUL di halaman lain (kecuali cover)
+                showNavbar(); 
             }
         }
 
         function showSection(targetId) {
             const sections = document.querySelectorAll('.content-section');
             const navItems = document.querySelectorAll('.nav-item');
+            
+            // Logika untuk halaman cover, tidak perlu setBackground atau showNavbar
+            if (targetId === 'cover-page') {
+                hideNavbar(); 
+                document.getElementById('cover-page').style.display = 'flex';
+                document.getElementById('main-content').style.display = 'none';
+                return;
+            }
 
+            // Panggil setBackground untuk mengurus video/gambar
             setBackground(targetId);
 
             sections.forEach(section => {
@@ -600,7 +599,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             var iframe = document.getElementById('vimeo-player');
             
-            // Sembunyikan Navbar di awal (Halaman Cover)
+            // Pastikan navbar tersembunyi saat load awal
             hideNavbar(); 
             
             if (iframe) {
@@ -626,7 +625,7 @@
                     coverPage.style.display = 'none';
                     mainContent.style.display = 'block';
                     
-                    // Setelah dibuka, tampilkan section 'profile'
+                    // Buka halaman profile dan tampilkan Navbar
                     showSection('profile'); 
                     
                 }, 1000);
@@ -638,7 +637,6 @@
                 } else {
                     player.play();
                     if(isMuted) {
-                        // Jika video di-play secara manual, un-mute volume
                         player.setVolume(1); 
                         muteIcon.className = 'fas fa-volume-up';
                         isMuted = false;
@@ -665,7 +663,7 @@
                     const target = this.getAttribute('data-target');
                     
                     if(target === 'cover-page') {
-                        // Kembali ke halaman sampul (reload akan mengaktifkan CSS default navbar)
+                        // Kembali ke halaman sampul
                         window.location.reload(); 
                         return;
                     }
