@@ -814,11 +814,22 @@
             
             imageBackground.style.display = 'block';
             
-            // Logika untuk Form RSVP (Google Form via Iframe)
+          // Logika untuk Form RSVP (Google Form via Iframe)
             const rsvpForm = document.getElementById('rsvp-form');
             const successMessage = document.getElementById('rsvp-success-message');
 
-            rsvpForm.addEventListener('submit', function() {
+            // 👇 GANTI EVENT LISTENER LAMA DENGAN INI 👇
+            rsvpForm.addEventListener('submit', function(e) { // Tambahkan 'e' untuk event
+                
+                e.preventDefault(); // 👈 KOREKSI UTAMA: Menghentikan halaman me-refresh
+
+                const formData = new FormData(rsvpForm);
+                const actionUrl = rsvpForm.action;
+                
+                // Secara teknis, karena form menggunakan method="POST" dan target="hidden-iframe",
+                // pengiriman form secara native akan terjadi di sini:
+                rsvpForm.submit();
+                
                 // Beri jeda 500ms agar Google Form merespons
                 setTimeout(function() {
                     successMessage.style.display = 'block';
@@ -830,8 +841,10 @@
                     }, 3000);
                     
                     // Muat ulang guestbook setelah submit
-                    isGuestbookLoaded = false; 
-                    loadGuestbook(); 
+                    // Cek apakah section RSVP sedang aktif sebelum memuat ulang
+                    if (document.getElementById('rsvp').style.display === 'block') {
+                        loadGuestbook(); 
+                    }
                     
                 }, 500); 
             });
