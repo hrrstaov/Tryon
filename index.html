@@ -32,13 +32,14 @@
             color: #4b3e3e;
             z-index: 100;
             transition: opacity 1s ease-in-out;
-            /* Ganti dengan gambar background Anda */
+            /* **[GANTI INI]**: Sesuaikan dengan nama file gambar background Anda (harus di folder yang sama) */
             background-image: url('background.jpg'); 
         }
 
         #cover-page h1 {
             font-size: 3em;
             margin-bottom: 10px;
+            /* Sesuaikan Font dengan tulisan tangan yang Anda suka */
             font-family: 'Brush Script MT', cursive; 
         }
 
@@ -83,7 +84,7 @@
             position: fixed;
             top: 10px;
             right: 10px;
-            z-index: 51; /* Harus lebih tinggi dari navbar */
+            z-index: 51; 
             transition: opacity 0.3s;
         }
         
@@ -111,9 +112,8 @@
             justify-content: space-around;
             align-items: center;
             z-index: 50;
-            /* Tambahkan transisi agar animasi hide/show lebih halus */
             transition: transform 0.3s ease-in-out; 
-            transform: translateY(0); /* Default: terlihat */
+            transform: translateY(0); 
         }
         
         /* Class CSS untuk menyembunyikan navbar */
@@ -140,6 +140,7 @@
             padding: 20px;
             margin: 20px auto;
             max-width: 600px;
+            /* Latar belakang semi-transparan agar video tetap terlihat di belakang */
             background: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -156,6 +157,7 @@
             cursor: pointer;
             font-size: 0.9em;
             transition: background-color 0.3s;
+            margin-top: 5px;
         }
         .bank-info {
             margin-bottom: 15px;
@@ -176,7 +178,7 @@
         
         <iframe 
             id="youtube-player" 
-            src="https://www.youtube.com/embed/UI86l8Asjg8?autoplay=1&loop=1&playlist=VIDEO_ID_ANDA&controls=0&mute=1&disablekb=1&modestbranding=1&enablejsapi=1"
+            src="https://www.youtube.com/embed/UI86l8Asjg8?autoplay=0&controls=0&mute=1&disablekb=1&modestbranding=1&enablejsapi=1&playsinline=1" 
             frameborder="0" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
             allowfullscreen>
@@ -189,12 +191,12 @@
         <div class="content-section" id="detail">
             <h2>Detail Acara</h2>
             <p>Informasi lokasi, tanggal, dan waktu.</p>
-        </div>
+            </div>
         
         <div class="content-section" id="galeri">
             <h2>Galeri Foto</h2>
             <p>Tempat foto-foto Anda berdua.</p>
-        </div>
+            </div>
         
         <div class="content-section" id="kado">
             <h2><i class="fas fa-gift"></i> Kirim Hadiah & Tanda Kasih</h2>
@@ -216,7 +218,7 @@
                 <h3>Untuk Vian</h3>
                 <p><strong>BANK MANDIRI</strong></p>
                 <p id="rekening-vian">13700xxxxxx</p>
-                 <button class="copy-btn" data-target="rekening-vian">Salin No. Rekening</button>
+                <button class="copy-btn" data-target="rekening-vian">Salin No. Rekening</button>
                 <p>A.N. Vian Pradipta</p>
             </div>
 
@@ -226,7 +228,7 @@
         <div class="content-section" id="rsvp">
             <h2>RSVP & Ucapan</h2>
             <p>Formulir kehadiran dan ucapan dari tamu.</p>
-        </div>
+            </div>
         
     </div>
 
@@ -274,16 +276,12 @@
             });
         }
         
-        // Fungsi untuk memulai video (dipanggil setelah API siap)
         function onPlayerReady(event) {
-            // Video diset untuk paused di awal.
-            // Kita akan play manual setelah tombol "Buka Undangan" diklik.
-            // Navbar diatur tersembunyi secara default di HTML, namun kita tampilkan jika video paused
             navBar.classList.remove('navbar-hidden');
         }
 
 
-        // Fungsi untuk melacak status player dan mengontrol navbar
+        // Fungsi untuk melacak status player, mengontrol navbar, dan looping manual
         function onPlayerStateChange(event) {
             var toggleBtn = document.getElementById('toggle-video-btn');
             var icon = toggleBtn.querySelector('i');
@@ -294,8 +292,13 @@
                 icon.className = 'fas fa-pause';
                 navBar.classList.add('navbar-hidden'); 
 
+            } else if (event.data == YT.PlayerState.ENDED) {
+                // Video Selesai: Putar ulang untuk looping (penting untuk Shorts)
+                player.seekTo(0); 
+                player.playVideo(); 
+                
             } else {
-                // Video sedang berhenti (PAUSED, ENDED, BUFFERING): Tampilkan Navbar
+                // Video sedang berhenti (PAUSED, BUFFERING, dll.): Tampilkan Navbar
                 playerStatus = 'paused';
                 icon.className = 'fas fa-play';
                 navBar.classList.remove('navbar-hidden');
@@ -313,7 +316,7 @@
                 coverPage.style.display = 'none';
                 mainContent.style.display = 'block';
                 
-                // Mulai Video dan Sembunyikan Navbar
+                // Mulai Video
                 if (player && player.playVideo) {
                     player.playVideo();
                 }
@@ -355,10 +358,15 @@
             });
         });
         
-        // Fungsi untuk Smooth Scrolling pada Navigator Bar (Opsional)
+        // Fungsi untuk Smooth Scrolling pada Navigator Bar 
         document.querySelectorAll('#navigator-bar a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
+                // Pause video ketika navigasi diklik
+                if (player && player.pauseVideo) {
+                    player.pauseVideo();
+                }
+
                 document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
                 });
