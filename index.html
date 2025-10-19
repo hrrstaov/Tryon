@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <style>
-        /* FONT IMPORT */
+        /* FONT IMPORT (Gunakan jika Anda ingin font spesifik) */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
         /* CSS Dasar untuk Full Screen dan Reset */
@@ -36,12 +36,15 @@
             z-index: 100;
             transition: opacity 1s ease-in-out;
             
+            /* **[GANTI INI]**: Sesuaikan dengan nama file gambar background gradien Anda */
             background-image: url('cover-background.jpg'); 
             position: relative; 
         }
 
         /* CONTAINER KARTU DI TENGAH */
         .cover-card {
+            width: 90%;
+            max-width: 400px;
             background-color: #fffaf5; 
             padding: 0; 
             border-radius: 20px;
@@ -51,30 +54,22 @@
             flex-direction: column;
             align-items: center;
             overflow: hidden; 
-            
-            max-width: 350px; 
-            width: 90%; 
-            margin: 0 20px; 
-            box-sizing: border-box; 
         }
         
         /* STYLE GAMBAR ARTWORK */
         .cover-card img.cover-art {
-            max-width: 80%; 
+            width: 100%; 
             height: auto;
             display: block;
-            margin: 30px auto 0; 
         }
 
         /* STYLE TOMBOL BUKA UNDANGAN (ORANGE) */
         #open-invitation-btn {
             width: 80%; 
             padding: 12px 0; 
-            margin-top: 20px; 
-            margin-bottom: 30px; 
-            
+            margin-bottom: 20px; 
             border: none;
-            background-color: #ff9800; 
+            background-color: #ff9800; /* Warna Orange */
             color: #4b3e3e; 
             font-size: 1.1em;
             font-weight: 700;
@@ -158,10 +153,21 @@
             opacity: 0;
             transform: translateY(100%); 
             pointer-events: none;
-            visibility: hidden; 
             transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; 
         }
         
+        .navbar-visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        
+        .navbar-hidden {
+            opacity: 0;
+            transform: translateY(100%);
+            pointer-events: none;
+        }
+
         .nav-item {
             display: flex;
             flex-direction: column;
@@ -241,7 +247,7 @@
             margin-bottom: 15px;
         }
 
-        /* --- Gaya untuk Halaman Acara --- */
+        /* --- Gaya Baru untuk Halaman Acara --- */
         img.event-location-photo {
             max-width: 100%; 
             height: auto;
@@ -252,18 +258,18 @@
 
         .event-button-container {
             display: flex;
-            flex-wrap: wrap; 
+            flex-wrap: wrap; /* Agar tombol bisa pindah baris jika terlalu banyak */
             justify-content: center;
-            gap: 10px; 
+            gap: 10px; /* Jarak antar tombol */
             margin-top: 20px;
         }
 
         .event-button {
-            display: inline-flex; 
+            display: inline-flex; /* Menggunakan flex untuk icon dan teks */
             align-items: center;
             justify-content: center;
             padding: 10px 15px;
-            background-color: #6a4c9c; 
+            background-color: #6a4c9c; /* Warna ungu */
             color: white;
             text-decoration: none;
             border-radius: 8px;
@@ -287,7 +293,7 @@
     <div id="cover-page">
         <div class="cover-card">
             
-            <img src="cover-art.jpg" alt="The Wedding of Ovi & Vian" class="cover-art">
+            <img src="cover-art.png" alt="The Wedding of Ovi & Vian" class="cover-art">
             
             <button id="open-invitation-btn">
                 BUKA UNDANGAN
@@ -429,35 +435,18 @@
         let isMuted = true; 
 
 
-        /* Fungsi untuk MENAMPILKAN Navbar */
-        function showNavbar() {
-            navBar.style.visibility = 'visible'; 
-            navBar.style.opacity = '1';
-            navBar.style.transform = 'translateY(0)';
-            navBar.style.pointerEvents = 'auto';
-        }
-
-        /* Fungsi untuk MENYEMBUNYIKAN Navbar */
-        function hideNavbar() {
-            navBar.style.opacity = '0';
-            navBar.style.transform = 'translateY(100%)';
-            navBar.style.pointerEvents = 'none';
-            setTimeout(() => {
-                navBar.style.visibility = 'hidden';
-            }, 300); 
-        }
-
-        /* Dihapus: onPlayerPlay dan onPlayerPause tidak lagi mengontrol Navbar */
         function onPlayerPlay() {
             playerStatus = 'playing';
             icon.className = 'fas fa-pause';
-            // Navbar tidak disembunyikan di sini
+            navBar.classList.remove('navbar-visible'); 
+            navBar.classList.add('navbar-hidden'); 
         }
 
         function onPlayerPause() {
             playerStatus = 'paused';
             icon.className = 'fas fa-play';
-            // Navbar tidak ditampilkan di sini
+            navBar.classList.remove('navbar-hidden'); 
+            navBar.classList.add('navbar-visible'); 
         }
 
         function onPlayerEnded() {
@@ -472,26 +461,25 @@
                 imageBackground.style.display = 'none';
                 videoControls.style.display = 'flex'; 
                 
-                // Atur Video
+                navBar.classList.remove('navbar-visible');
+                navBar.classList.add('navbar-hidden');
+                
                 if (player && playerStatus !== 'playing') {
-                    // Coba putar video
                     player.play().catch(error => {
-                        console.log("Autoplay diblokir.");
+                        console.log("Autoplay di Profile diblokir, menunggu interaksi pengguna.");
                         playerStatus = 'paused';
                         icon.className = 'fas fa-play';
+                        navBar.classList.add('navbar-visible'); 
+                        navBar.classList.remove('navbar-hidden');
                     });
-                } 
-
-                // Selalu tampilkan navbar di halaman konten
-                showNavbar(); 
-                
+                }
             } else {
                 videoPlayer.style.display = 'none';
                 imageBackground.style.display = 'block';
                 videoControls.style.display = 'none'; 
                 
-                // Selalu tampilkan navbar di halaman konten
-                showNavbar(); 
+                navBar.classList.remove('navbar-hidden');
+                navBar.classList.add('navbar-visible'); 
                 
                 if (player && playerStatus === 'playing') {
                     player.pause();
@@ -532,8 +520,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             var iframe = document.getElementById('vimeo-player');
             
-            // Panggil hideNavbar() di awal untuk memastikan ia tersembunyi saat loading halaman sampul
-            hideNavbar();
+            navBar.classList.add('navbar-hidden');
             
             if (iframe) {
                 player = new Vimeo.Player(iframe);
@@ -551,7 +538,8 @@
             document.getElementById('open-invitation-btn').addEventListener('click', function() {
                 var coverPage = document.getElementById('cover-page');
                 var mainContent = document.getElementById('main-content');
-                
+                var navBar = document.getElementById('navigator-bar');
+
                 coverPage.style.opacity = '0';
                 
                 setTimeout(function() {
@@ -559,7 +547,10 @@
                     mainContent.style.display = 'block';
                     
                     showSection('profile'); 
-                    showNavbar(); // Tampilkan navbar setelah masuk ke main content
+                    
+                    if (playerStatus !== 'playing') {
+                        navBar.classList.add('navbar-visible');
+                    }
                     
                 }, 1000);
             });
