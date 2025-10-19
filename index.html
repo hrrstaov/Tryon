@@ -18,8 +18,8 @@
         /* CSS Dasar untuk Full Screen dan Reset */
         body {
             margin: 0;
-            padding: 0; /* Pastikan tidak ada padding/margin default */
-            height: 100%; /* Pastikan body mengisi 100% tinggi layar */
+            padding: 0;
+            height: 100%;
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
             background-color: #9BBDE6;
@@ -34,7 +34,6 @@
             top: 0;
             left: 0;
             width: 100%;
-            /* Ganti height: 100% menjadi 100vh untuk menjamin 100% dari viewport */
             height: 100vh; 
             
             display: flex;
@@ -48,6 +47,7 @@
             z-index: 100;
             transition: opacity 1s ease-in-out;
             
+            /* ⚠️ GANTI DENGAN GAMBAR COVER ASLI ANDA */
             background-image: url('cover-background.jpg'); 
             position: relative; 
         }
@@ -76,6 +76,7 @@
             height: auto;
             display: block;
             margin: 0 auto; 
+            /* ⚠️ PASTIKAN URL GAMBAR ARTWORK INI BENAR */
         }
 
         /* STYLE TOMBOL BUKA UNDANGAN (ORANGE) */
@@ -129,28 +130,28 @@
             background-size: cover;
             background-position: center;
             display: none; 
-            background-image: url('cover-background.jpg'); 
+            background-image: url('cover-background.jpg'); /* Background default untuk selain Profile */
         }
 
-        /* Kontrol Video (Floating Button) *//* Kontrol Video (Floating Button) */
-#video-controls {
-    position: fixed;
-    top: 50%; /* Jarak dari atas 50% */
-    right: 10px; 
-    transform: translateY(-50%); /* Menggeser ke atas setengah tinggi tombol */
-    z-index: 51; 
-    transition: opacity 0.3s;
-    display: none; 
-    
-    /* Agar tombol berbaris horizontal */
-    display: flex; 
-    flex-direction: row; 
-    gap: 10px; 
-}
+        /* Kontrol Video (Floating Button) */
+        #video-controls {
+            position: fixed;
+            top: 50%; 
+            right: 10px; 
+            transform: translateY(-50%); 
+            z-index: 51; 
+            transition: opacity 0.3s;
+            display: none; 
+            
+            /* Agar tombol berbaris horizontal */
+            display: flex; 
+            flex-direction: row; 
+            gap: 10px; 
+        }
         
         #video-controls button {
             background: rgba(106, 76, 156, 0.7); /* Ungu Anda dengan transparansi 70% */
-    color: white;
+            color: white;
             border: none;
             border-radius: 50%;
             width: 40px;
@@ -226,7 +227,6 @@
             margin: 80px auto 100px; /* Jarak atas 80px, bawah 100px agar tidak tertutup navbar */
             width: 90%; 
             max-width: 320px; 
-            background: rgba(255, 255, 255, 0.85); 
             background-color: #FFEEC4;
             border-radius: 15px; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -234,13 +234,12 @@
             color: #274D77;
             font-size: 0.9em; 
         }
+        
         #profile .content-wrapper {
-    margin-top: 0px; /* <--- Ganti dengan nilai yang Anda inginkan (misal 20px) */
-    /* Atau gunakan 0px jika ingin menempel ke atas (tapi berhati-hati dengan tombol Play/Mute) */
-    
-    /* PENTING: Anda mungkin perlu sedikit padding-top jika ingin konten tetap bernafas di atas */
-    padding-top: 10px; 
-}
+            margin-top: 20px; /* Jarak atas khusus Profile */
+            padding-top: 10px; 
+        }
+        
         .content-wrapper h2 {
             font-size: 1.5em; 
             margin-top: 0;
@@ -351,6 +350,7 @@
             display: none;
         }
 
+        /* Gaya Guestbook */
         .guestbook-item {
             background-color: #f7fef7; 
             border-left: 5px solid #6a4c9c; 
@@ -416,7 +416,12 @@
         </div>
 
         <div class="content-section" id="profile">
+            <div class="content-wrapper">
+                <h2>Ovi & Vian</h2>
+                <p>Maha Suci Allah yang telah menciptakan pasangan-pasangan dari jenis kita. Kami mengundang Anda dalam pernikahan kami.</p>
             </div>
+            
+        </div>
         
         <div class="content-section" id="detail">
             <div class="content-wrapper">
@@ -435,8 +440,6 @@
                         <i class="fas fa-map-marker-alt"></i> Google Maps
                     </a>
                     
-
-
                     <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=The+Wedding+of+Ovi+%26+Vian&details=Akad+and+Reception+Ovi+%26+Vian&dates=20251122T080000/20251122T150000&location=Primarasa+Ahmad+Yani" target="_blank" class="event-button">
                         <i class="fas fa-calendar-plus"></i> Add to Calendar
                     </a>
@@ -522,19 +525,19 @@
             <i class="fas fa-envelope"></i>
             <span>Invitation</span>
         </a>
-        <a href="#profile" class="nav-item" data-target="profile">
+        <a href="#" class="nav-item" data-target="profile">
             <i class="fas fa-heart"></i>
             <span>Profile</span>
         </a>
-        <a href="#detail" class="nav-item active" data-target="detail">
+        <a href="#" class="nav-item active" data-target="detail">
             <i class="fas fa-calendar-alt"></i>
             <span>Event</span>
         </a>
-        <a href="#kado" class="nav-item" data-target="kado">
+        <a href="#" class="nav-item" data-target="kado">
             <i class="fas fa-gift"></i>
             <span>Gift</span>
         </a>
-        <a href="#rsvp" class="nav-item" data-target="rsvp">
+        <a href="#" class="nav-item" data-target="rsvp">
             <i class="fas fa-comment-alt"></i>
             <span>RSVP</span>
         </a>
@@ -542,7 +545,7 @@
 
     <script src="https://player.vimeo.com/api/player.js"></script>
     <script>
-        var player; 
+        var player;
         var playerStatus = 'paused';
         var navBar = document.getElementById('navigator-bar');
         var toggleBtn = document.getElementById('toggle-video-btn');
@@ -553,25 +556,25 @@
         
         const toggleMuteBtn = document.getElementById('toggle-mute-btn');
         const muteIcon = toggleMuteBtn.querySelector('i');
-        let isMuted = true; 
+        let isMuted = true;
+        let isGuestbookLoaded = false; // Flag untuk Guestbook
 
-
-        /* Fungsi untuk MENAMPILKAN Navbar (Hanya untuk halaman konten) */
+        /* Fungsi untuk MENAMPILKAN Navbar */
         function showNavbar() {
-            navBar.style.visibility = 'visible'; 
+            navBar.style.visibility = 'visible';
             navBar.style.opacity = '1';
             navBar.style.transform = 'translateY(0)';
             navBar.style.pointerEvents = 'auto';
         }
 
-        /* Fungsi untuk MENYEMBUNYIKAN Navbar (Hanya untuk halaman sampul) */
+        /* Fungsi untuk MENYEMBUNYIKAN Navbar */
         function hideNavbar() {
             navBar.style.opacity = '0';
             navBar.style.transform = 'translateY(100%)';
             navBar.style.pointerEvents = 'none';
             setTimeout(() => {
                 navBar.style.visibility = 'hidden';
-            }, 300); 
+            }, 300);
         }
 
         function onPlayerPlay() {
@@ -591,14 +594,18 @@
 
         /* FUNGSI BARU: MENAMPILKAN UCAPAN TAMU (Guestbook) */
         function loadGuestbook() {
+            // Jika sudah dimuat dan bukan saat refresh, lewati
+            if (isGuestbookLoaded) {
+                console.log("Guestbook sudah dimuat, dilewati.");
+                return;
+            }
+
             const guestbookList = document.getElementById('guestbook-list');
             guestbookList.innerHTML = '<p style="text-align: center;">Memuat ucapan...</p>';
 
             /* ==========================================================
-                ⚠️ PERLU DIGANTI: INI HANYA DATA CONTOH (DUMMY DATA)
-                Untuk menampilkan data nyata, Anda perlu menggunakan SheetDB / Sheet2API 
-                untuk mengambil data dari Google Sheet Anda yang terisi.
-                ==========================================================
+                ⚠️ GANTI DENGAN KODE API NYATA (SheetDB/Sheet2API) DI SINI
+               ==========================================================
             */
             const realData = [
                 { name: "Siti Rahma & Keluarga", attendance: "Hadir", message: "Selamat menempuh hidup baru! Semoga Ovi & Vian selalu dalam lindungan Allah. Amin." },
@@ -606,16 +613,14 @@
                 { name: "Wina", attendance: "Hadir", message: "Happy wedding! Jangan lupa mampir ke rumah ya :)" },
             ];
             
-            // Logika menampilkan data:
-            
-            // fetch('URL_API_GOOGLE_SHEET_ANDA') // <--- Uncomment ini jika API sudah siap
+            // fetch('URL_API_GOOGLE_SHEET_ANDA') 
             // .then(response => response.json())
-            // .then(data => { // Ganti 'data' ini dengan 'realData' untuk pengujian dummy
+            // .then(data => { 
             
-            guestbookList.innerHTML = ''; // Kosongkan pesan loading
+            guestbookList.innerHTML = '';
             
-            realData.forEach(item => {
-                // Tentukan ikon berdasarkan status kehadiran
+            // Gunakan 'realData' untuk pengujian dummy
+            realData.forEach(item => { 
                 const icon = item.attendance === 'Hadir' ? 
                     '<span style="color: green;"><i class="fas fa-check-circle"></i> Hadir</span>' : 
                     '<span style="color: red;"><i class="fas fa-times-circle"></i> Tidak Hadir</span>';
@@ -631,8 +636,9 @@
                 `;
                 guestbookList.insertAdjacentHTML('beforeend', itemHtml);
             });
-
-            // }) // Penutup dari .then(data => 
+            
+            isGuestbookLoaded = true; // Set flag setelah selesai
+            // }) 
             // .catch(error => {
             //     guestbookList.innerHTML = '<p style="color: red; text-align: center;">Gagal memuat ucapan. Cek koneksi API Anda.</p>';
             // });
@@ -643,39 +649,40 @@
             if (targetId === 'profile') {
                 videoPlayer.style.display = 'block';
                 imageBackground.style.display = 'none';
-                videoControls.style.display = 'flex'; 
+                videoControls.style.display = 'flex';
                 
                 if (player && playerStatus !== 'playing') {
                     player.play().catch(error => {
                         console.log("Autoplay diblokir.");
                     });
-                } 
+                }
                 
-                showNavbar(); 
+                showNavbar();
 
             } else {
                 videoPlayer.style.display = 'none';
                 imageBackground.style.display = 'block';
-                videoControls.style.display = 'none'; 
+                videoControls.style.display = 'none';
                 
                 if (player && playerStatus === 'playing') {
                     player.pause();
                 }
                 
-                showNavbar(); 
+                showNavbar();
             }
         }
 
+        /* FUNGSI UTAMA UNTUK MENGGANTI HALAMAN (SUDAH DIPERBAIKI DARI LOGIKA ANDA SEBELUMNYA) */
         function showSection(targetId) {
             const sections = document.querySelectorAll('.content-section');
             const navItems = document.querySelectorAll('.nav-item');
             
             if (targetId === 'cover-page') {
-                hideNavbar(); 
-                document.getElementById('cover-page').style.opacity = '1'; 
+                hideNavbar();
+                document.getElementById('cover-page').style.opacity = '1';
                 document.getElementById('cover-page').style.display = 'flex';
                 document.getElementById('main-content').style.display = 'none';
-                document.body.style.overflowY = 'hidden'; // Kembali sembunyikan scrollbar
+                document.body.style.overflowY = 'hidden';
                 return;
             }
 
@@ -692,36 +699,36 @@
             const targetSection = document.getElementById(targetId);
             if (targetSection) {
                 targetSection.style.display = 'block';
-            }
-
-            // PANGGIL FUNGSI GUESTBOOK HANYA KETIKA PINDAH KE HALAMAN RSVP
+                
+                // Panggil fungsi loadGuestbook di sini
                 if (targetId === 'rsvp') {
-                    loadGuestbook(); 
+                    loadGuestbook();
                 }
                 
-            }
-            const targetNavItem = document.querySelector(`.nav-item[data-target="${targetId}"]`);
-            if (targetNavItem) {
-                targetNavItem.classList.add('active');
+                const targetNavItem = document.querySelector(`.nav-item[data-target="${targetId}"]`);
+                if (targetNavItem) {
+                    targetNavItem.classList.add('active');
+                }
             }
             
+            // Set scroll ke atas setiap pindah halaman
             document.getElementById('main-content').scrollTop = 0;
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
-        }
-
+        } 
 
         document.addEventListener('DOMContentLoaded', function() {
             var iframe = document.getElementById('vimeo-player');
             
-            hideNavbar(); 
+            hideNavbar();
             
+            // Inisialisasi Vimeo Player
             if (iframe) {
                 player = new Vimeo.Player(iframe);
                 
                 player.ready().then(function() {
-                    onPlayerPause(); 
-                    player.setVolume(0); 
+                    onPlayerPause();
+                    player.setVolume(0);
 
                     player.on('play', onPlayerPlay);
                     player.on('pause', onPlayerPause);
@@ -729,6 +736,7 @@
                 });
             }
 
+            // EVENT LISTENER TOMBOL OPEN INVITATION (SUDAH DIPERBAIKI)
             document.getElementById('open-invitation-btn').addEventListener('click', function() {
                 var coverPage = document.getElementById('cover-page');
                 var mainContent = document.getElementById('main-content');
@@ -738,20 +746,22 @@
                 setTimeout(function() {
                     coverPage.style.display = 'none';
                     mainContent.style.display = 'block';
-                    document.body.style.overflowY = 'auto'; // Tampilkan scrollbar untuk halaman konten
+                    document.body.style.overflowY = 'auto'; // Tampilkan scrollbar
                     
-                    showSection('profile'); 
+                    showSection('profile'); // Tampilkan halaman pertama
                     
                 }, 1000);
             });
 
+            // Video Controls
             toggleBtn.addEventListener('click', function() {
                 if (playerStatus === 'playing') {
                     player.pause();
                 } else {
                     player.play();
+                    // Auto-unmute saat play pertama kali
                     if(isMuted) {
-                        player.setVolume(1); 
+                        player.setVolume(1);
                         muteIcon.className = 'fas fa-volume-up';
                         isMuted = false;
                     }
@@ -760,31 +770,27 @@
             
             toggleMuteBtn.addEventListener('click', function() {
                 if (isMuted) {
-                    player.setVolume(1); 
+                    player.setVolume(1);
                     muteIcon.className = 'fas fa-volume-up';
                     isMuted = false;
                 } else {
-                    player.setVolume(0); 
+                    player.setVolume(0);
                     muteIcon.className = 'fas fa-volume-mute';
                     isMuted = true;
                 }
             });
 
+            // Navigasi Bottom Bar
             document.querySelectorAll('#navigator-bar a[data-target]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
                     
                     const target = this.getAttribute('data-target');
-                    
-                    if(target === 'cover-page') {
-                        window.location.reload(); 
-                        return;
-                    }
-                    
                     showSection(target);
                 });
             });
 
+            // Tombol Copy Rekening
             document.querySelectorAll('.copy-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const targetId = this.getAttribute('data-target');
@@ -798,7 +804,7 @@
                         
                         setTimeout(() => {
                             this.textContent = originalText;
-                            this.style.backgroundColor = '#6a4c9c';
+                            this.style.backgroundColor = '#274D77'; 
                         }, 1500);
                     }).catch(err => {
                         console.error('Failed Copy: ', err);
@@ -809,14 +815,12 @@
             
             imageBackground.style.display = 'block';
             
-            // Logika untuk Form RSVP
-           // Logika baru untuk Form RSVP menggunakan Google Forms via Iframe
+            // Logika untuk Form RSVP (Google Form via Iframe)
             const rsvpForm = document.getElementById('rsvp-form');
             const successMessage = document.getElementById('rsvp-success-message');
 
             rsvpForm.addEventListener('submit', function() {
-                // Tampilkan pesan sukses dan kosongkan form setelah pengiriman berhasil
-                // Menggunakan setTimeout untuk memberi waktu agar data terkirim ke Google Form
+                // Beri jeda 500ms agar Google Form merespons
                 setTimeout(function() {
                     successMessage.style.display = 'block';
                     rsvpForm.reset();
@@ -826,10 +830,11 @@
                         successMessage.style.display = 'none';
                     }, 3000);
                     
-                    // Panggil fungsi untuk memuat ulang daftar ucapan
-                    // loadGuestbook(); // <--- Uncomment ini jika API sudah siap untuk refresh list
+                    // Muat ulang guestbook setelah submit
+                    isGuestbookLoaded = false; 
+                    loadGuestbook(); 
                     
-                }, 500); // Penundaan kecil untuk memastikan pengiriman ke Google Forms
+                }, 500); 
             });
         });
     </script>
