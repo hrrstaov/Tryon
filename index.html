@@ -613,10 +613,15 @@
                         
                         // ⚠️ PASTIKAN item.Nama, item.Kehadiran, item.Pesan SAMA dengan NAMA KOLOM di Google Sheet Anda
                         const guestName = item.Nama_Anda || item.Nama; // Ganti 'Nama_Anda' jika nama kolom berbeda
-                        const attendanceStatus = item.Konfirmasi_Kehadiran; // Ganti jika nama kolom berbeda
+                        const attendanceStatus = item.Kehadiran; // Ganti jika nama kolom berbeda
                         const messageText = item.Pesan_Ucapan_Indah || item.Pesan; // Ganti jika nama kolom berbeda
                         
-                        const icon = attendanceStatus === 'Hadir' ? 
+    
+
+                        // Ubah nilai dari Sheet menjadi huruf kapital semua sebelum membandingkan
+                        const statusUpper = attendanceStatus.toUpperCase(); 
+
+                        const icon = statusUpper === 'HADIR' ? 
                             '<span style="color: green;"><i class="fas fa-check-circle"></i> Hadir</span>' : 
                             '<span style="color: red;"><i class="fas fa-times-circle"></i> Tidak Hadir</span>';
 
