@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <style>
-        /* FONT IMPORT (Gunakan jika Anda ingin font spesifik) */
+        /* FONT IMPORT */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
         /* CSS Dasar untuk Full Screen dan Reset */
@@ -36,17 +36,17 @@
             z-index: 100;
             transition: opacity 1s ease-in-out;
             
-            /* **[GANTI INI]**: Sesuaikan dengan nama file gambar background gradien Anda */
             background-image: url('cover-background.jpg'); 
             position: relative; 
         }
 
         /* CONTAINER KARTU DI TENGAH */
         .cover-card {
-            width: 90%;
-            max-width: 400px;
             background-color: #fffaf5; 
-            padding: 0; 
+            
+            /* **PERUBAHAN DI SINI:** Tambahkan padding untuk ruang di sekeliling konten */
+            padding: 30px 20px; /* Padding atas/bawah 30px, kiri/kanan 20px */
+            
             border-radius: 20px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             position: relative;
@@ -54,22 +54,33 @@
             flex-direction: column;
             align-items: center;
             overflow: hidden; 
+            
+            max-width: 350px; 
+            width: 90%; 
+            margin: 0 20px; 
+            box-sizing: border-box; 
         }
         
         /* STYLE GAMBAR ARTWORK */
         .cover-card img.cover-art {
-            width: 100%; 
+            /* **PERUBAHAN DI SINI:** Hapus margin vertikal, biarkan padding card yang bekerja */
+            max-width: 100%; /* Gunakan lebar penuh dari ruang yang tersisa (90% dari container) */
             height: auto;
             display: block;
+            margin: 0 auto; 
         }
 
         /* STYLE TOMBOL BUKA UNDANGAN (ORANGE) */
         #open-invitation-btn {
-            width: 80%; 
+            width: 100%; /* Gunakan lebar penuh dari ruang yang tersisa */
             padding: 12px 0; 
-            margin-bottom: 20px; 
+            
+            /* **PERUBAHAN DI SINI:** Sesuaikan margin vertikal */
+            margin-top: 20px; 
+            margin-bottom: 0; /* Hapus margin bawah karena sudah ada padding card */
+            
             border: none;
-            background-color: #ff9800; /* Warna Orange */
+            background-color: #ff9800; 
             color: #4b3e3e; 
             font-size: 1.1em;
             font-weight: 700;
@@ -153,21 +164,10 @@
             opacity: 0;
             transform: translateY(100%); 
             pointer-events: none;
+            visibility: hidden; 
             transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; 
         }
         
-        .navbar-visible {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-        
-        .navbar-hidden {
-            opacity: 0;
-            transform: translateY(100%);
-            pointer-events: none;
-        }
-
         .nav-item {
             display: flex;
             flex-direction: column;
@@ -207,6 +207,7 @@
             background: transparent; 
         }
         
+        /* CONTENT WRAPPER - Mirip dengan Cover Card sekarang */
         .content-wrapper {
             padding: 20px;
             margin: 80px auto 100px; 
@@ -247,7 +248,7 @@
             margin-bottom: 15px;
         }
 
-        /* --- Gaya Baru untuk Halaman Acara --- */
+        /* Gaya untuk Halaman Acara */
         img.event-location-photo {
             max-width: 100%; 
             height: auto;
@@ -255,21 +256,19 @@
             margin-bottom: 20px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-
         .event-button-container {
             display: flex;
-            flex-wrap: wrap; /* Agar tombol bisa pindah baris jika terlalu banyak */
+            flex-wrap: wrap; 
             justify-content: center;
-            gap: 10px; /* Jarak antar tombol */
+            gap: 10px; 
             margin-top: 20px;
         }
-
         .event-button {
-            display: inline-flex; /* Menggunakan flex untuk icon dan teks */
+            display: inline-flex; 
             align-items: center;
             justify-content: center;
             padding: 10px 15px;
-            background-color: #6a4c9c; /* Warna ungu */
+            background-color: #6a4c9c; 
             color: white;
             text-decoration: none;
             border-radius: 8px;
@@ -278,13 +277,52 @@
             transition: background-color 0.3s ease;
         }
 
-        .event-button:hover {
+        /* Gaya untuk Formulir RSVP */
+        .rsvp-form label {
+            display: block;
+            text-align: left;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #4b3e3e;
+        }
+        .rsvp-form input[type="text"],
+        .rsvp-form select,
+        .rsvp-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box; 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1em;
+        }
+        .rsvp-form textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .rsvp-submit-btn {
+            width: 100%;
+            padding: 12px 0;
+            margin-top: 15px;
+            border: none;
+            background-color: #6a4c9c; 
+            color: white;
+            font-size: 1.1em;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .rsvp-submit-btn:hover {
             background-color: #5a3f8a;
         }
-
-        .event-button i {
-            margin-right: 8px;
-            font-size: 1.1em;
+        .message-success {
+            color: green;
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
         }
     </style>
 </head>
@@ -389,9 +427,32 @@
         
         <div class="content-section" id="rsvp">
             <div class="content-wrapper">
-                <h2>RSVP & Ucapan</h2>
-                <p>Formulir kehadiran dan ucapan dari tamu.</p>
-            </div>
+                <h2><i class="fas fa-comment-alt"></i> Konfirmasi Kehadiran & Ucapan</h2>
+                <p>Kami sangat menantikan kehadiran Anda di hari bahagia kami. Mohon konfirmasi kehadiran dan sampaikan pesan terbaik Anda!</p>
+                
+                <hr style="border-color: #eee; margin: 20px 0;">
+                
+                <form class="rsvp-form" id="rsvp-form">
+                    <label for="guest_name">Nama Anda:</label>
+                    <input type="text" id="guest_name" name="guest_name" required placeholder="Contoh: Budi & Keluarga">
+
+                    <label for="attendance">Konfirmasi Kehadiran:</label>
+                    <select id="attendance" name="attendance" required>
+                        <option value="">-- Pilih --</option>
+                        <option value="Hadir">Saya/Kami akan Hadir</option>
+                        <option value="Tidak Hadir">Mohon Maaf, Tidak Bisa Hadir</option>
+                    </select>
+
+                    <label for="message">Pesan/Ucapan Indah:</label>
+                    <textarea id="message" name="message" placeholder="Tuliskan ucapan dan doa terbaik Anda..."></textarea>
+
+                    <button type="submit" class="rsvp-submit-btn">KIRIM UCAPAN</button>
+                    
+                    <p class="message-success" id="rsvp-success-message">
+                        <i class="fas fa-check-circle"></i> Ucapan Anda berhasil terkirim!
+                    </p>
+                </form>
+                </div>
         </div>
         
     </div>
@@ -435,18 +496,34 @@
         let isMuted = true; 
 
 
+        /* Fungsi untuk MENAMPILKAN Navbar */
+        function showNavbar() {
+            navBar.style.visibility = 'visible'; 
+            navBar.style.opacity = '1';
+            navBar.style.transform = 'translateY(0)';
+            navBar.style.pointerEvents = 'auto';
+        }
+
+        /* Fungsi untuk MENYEMBUNYIKAN Navbar */
+        function hideNavbar() {
+            navBar.style.opacity = '0';
+            navBar.style.transform = 'translateY(100%)';
+            navBar.style.pointerEvents = 'none';
+            setTimeout(() => {
+                navBar.style.visibility = 'hidden';
+            }, 300); 
+        }
+
         function onPlayerPlay() {
             playerStatus = 'playing';
             icon.className = 'fas fa-pause';
-            navBar.classList.remove('navbar-visible'); 
-            navBar.classList.add('navbar-hidden'); 
+            hideNavbar(); 
         }
 
         function onPlayerPause() {
             playerStatus = 'paused';
             icon.className = 'fas fa-play';
-            navBar.classList.remove('navbar-hidden'); 
-            navBar.classList.add('navbar-visible'); 
+            showNavbar(); 
         }
 
         function onPlayerEnded() {
@@ -461,25 +538,26 @@
                 imageBackground.style.display = 'none';
                 videoControls.style.display = 'flex'; 
                 
-                navBar.classList.remove('navbar-visible');
-                navBar.classList.add('navbar-hidden');
-                
                 if (player && playerStatus !== 'playing') {
-                    player.play().catch(error => {
+                    player.play().then(() => {
+                        // Jika berhasil play, navbar akan disembunyikan oleh onPlayerPlay
+                    }).catch(error => {
                         console.log("Autoplay di Profile diblokir, menunggu interaksi pengguna.");
                         playerStatus = 'paused';
                         icon.className = 'fas fa-play';
-                        navBar.classList.add('navbar-visible'); 
-                        navBar.classList.remove('navbar-hidden');
+                        showNavbar(); 
                     });
+                } else if (playerStatus === 'playing') {
+                     hideNavbar(); 
+                } else {
+                     showNavbar(); 
                 }
             } else {
                 videoPlayer.style.display = 'none';
                 imageBackground.style.display = 'block';
                 videoControls.style.display = 'none'; 
                 
-                navBar.classList.remove('navbar-hidden');
-                navBar.classList.add('navbar-visible'); 
+                showNavbar(); 
                 
                 if (player && playerStatus === 'playing') {
                     player.pause();
@@ -520,7 +598,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             var iframe = document.getElementById('vimeo-player');
             
-            navBar.classList.add('navbar-hidden');
+            hideNavbar();
             
             if (iframe) {
                 player = new Vimeo.Player(iframe);
@@ -547,10 +625,6 @@
                     mainContent.style.display = 'block';
                     
                     showSection('profile'); 
-                    
-                    if (playerStatus !== 'playing') {
-                        navBar.classList.add('navbar-visible');
-                    }
                     
                 }, 1000);
             });
@@ -618,6 +692,26 @@
             });
             
             imageBackground.style.display = 'block';
+            
+            // Logika untuk Form RSVP
+            const rsvpForm = document.getElementById('rsvp-form');
+            const successMessage = document.getElementById('rsvp-success-message');
+
+            rsvpForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Di sini biasanya data akan dikirim ke server/Google Sheet.
+                // Karena ini hanya front-end, kita simulasikan sukses.
+                
+                // Tampilkan pesan sukses
+                successMessage.style.display = 'block';
+                
+                // Reset form setelah 2 detik
+                setTimeout(() => {
+                    rsvpForm.reset();
+                    successMessage.style.display = 'none';
+                }, 2000);
+            });
         });
     </script>
 
