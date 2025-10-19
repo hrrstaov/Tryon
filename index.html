@@ -10,12 +10,22 @@
         /* FONT IMPORT */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
+        /* --- PERBAIKAN KRITIS: Full Screen Body & HTML --- */
+        html {
+            height: 100%;
+        }
+
         /* CSS Dasar untuk Full Screen dan Reset */
         body {
             margin: 0;
+            padding: 0; /* Pastikan tidak ada padding/margin default */
+            height: 100%; /* Pastikan body mengisi 100% tinggi layar */
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
             background-color: #f7f3ed;
+            
+            /* Sembunyikan scrollbar vertikal saat di halaman sampul */
+            overflow-y: hidden; 
         }
         
         /* --- Halaman Depan (Cover Page) --- */
@@ -24,7 +34,9 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
+            /* Ganti height: 100% menjadi 100vh untuk menjamin 100% dari viewport */
+            height: 100vh; 
+            
             display: flex;
             flex-direction: column; 
             justify-content: center;
@@ -89,7 +101,7 @@
             display: none;
             min-height: 100vh;
             position: relative; 
-            overflow-y: auto; 
+            /* scrollbar akan dikontrol oleh JS saat halaman ini tampil */
         }
         
         /* Vimeo Player */
@@ -509,7 +521,6 @@
             }, 300); 
         }
 
-        // Tidak lagi memanggil hideNavbar/showNavbar di sini
         function onPlayerPlay() {
             playerStatus = 'playing';
             icon.className = 'fas fa-pause';
@@ -532,14 +543,12 @@
                 imageBackground.style.display = 'none';
                 videoControls.style.display = 'flex'; 
                 
-                // Coba putar video di halaman profile
                 if (player && playerStatus !== 'playing') {
                     player.play().catch(error => {
                         console.log("Autoplay diblokir.");
                     });
                 } 
                 
-                // Navbar TETAP MUNCUL di profile
                 showNavbar(); 
 
             } else {
@@ -547,12 +556,10 @@
                 imageBackground.style.display = 'block';
                 videoControls.style.display = 'none'; 
                 
-                // Pastikan video pause saat pindah
                 if (player && playerStatus === 'playing') {
                     player.pause();
                 }
                 
-                // Navbar TETAP MUNCUL di halaman lain (kecuali cover)
                 showNavbar(); 
             }
         }
@@ -561,15 +568,15 @@
             const sections = document.querySelectorAll('.content-section');
             const navItems = document.querySelectorAll('.nav-item');
             
-            // Logika untuk halaman cover, tidak perlu setBackground atau showNavbar
             if (targetId === 'cover-page') {
                 hideNavbar(); 
+                document.getElementById('cover-page').style.opacity = '1'; 
                 document.getElementById('cover-page').style.display = 'flex';
                 document.getElementById('main-content').style.display = 'none';
+                document.body.style.overflowY = 'hidden'; // Kembali sembunyikan scrollbar
                 return;
             }
 
-            // Panggil setBackground untuk mengurus video/gambar
             setBackground(targetId);
 
             sections.forEach(section => {
@@ -599,7 +606,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             var iframe = document.getElementById('vimeo-player');
             
-            // Pastikan navbar tersembunyi saat load awal
             hideNavbar(); 
             
             if (iframe) {
@@ -624,8 +630,8 @@
                 setTimeout(function() {
                     coverPage.style.display = 'none';
                     mainContent.style.display = 'block';
+                    document.body.style.overflowY = 'auto'; // Tampilkan scrollbar untuk halaman konten
                     
-                    // Buka halaman profile dan tampilkan Navbar
                     showSection('profile'); 
                     
                 }, 1000);
@@ -663,7 +669,6 @@
                     const target = this.getAttribute('data-target');
                     
                     if(target === 'cover-page') {
-                        // Kembali ke halaman sampul
                         window.location.reload(); 
                         return;
                     }
@@ -703,12 +708,8 @@
             rsvpForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                // Simulasikan sukses karena tanpa back-end
-                
-                // Tampilkan pesan sukses
                 successMessage.style.display = 'block';
                 
-                // Reset form setelah 2 detik
                 setTimeout(() => {
                     rsvpForm.reset();
                     successMessage.style.display = 'none';
