@@ -33,7 +33,7 @@
             z-index: 100;
             transition: opacity 1s ease-in-out;
             /* **[GANTI INI]**: Sesuaikan dengan nama file gambar background Anda */
-            background-image: url('background.jpg'); 
+            background-image: url('cover-background.jpg'); 
         }
 
         #cover-page h1 {
@@ -60,11 +60,11 @@
 
         /* --- Konten Utama (Main Content) --- */
         #main-content {
-            padding-bottom: 60px;
             display: none;
             min-height: 100vh;
-            text-align: center;
             position: relative; 
+            /* Mengaktifkan scrolling jika konten lebih panjang dari viewport */
+            overflow-y: auto; 
         }
         
         /* Vimeo Player sebagai Background */
@@ -80,7 +80,7 @@
             overflow: hidden;
         }
         
-        /* Tombol Pause/Play Video (Floating Button) */
+        /* Kontrol Video (Floating Button) */
         #video-controls {
             position: fixed;
             top: 10px;
@@ -117,7 +117,6 @@
             transform: translateY(0); 
         }
         
-        /* Class CSS untuk menyembunyikan navbar */
         .navbar-hidden {
             transform: translateY(100%);
         }
@@ -129,6 +128,11 @@
             color: #6a4c9c;
             font-size: 0.7em;
             text-decoration: none;
+            cursor: pointer; /* Agar terasa seperti tombol */
+        }
+        
+        .nav-item.active {
+            color: #4b3e3e; /* Warna ikon dan teks yang aktif */
         }
 
         .nav-item i {
@@ -136,10 +140,27 @@
             margin-bottom: 2px;
         }
 
-        /* Konten Undangan yang muncul di atas video */
+        /* --- Konten Section (Sistem Halaman) --- */
         .content-section {
+            /* Pastikan setiap section mengisi seluruh tinggi layar */
+            min-height: calc(100vh - 60px); /* 100vh dikurangi tinggi navbar */
+            padding-top: 50px; /* Padding atas agar tidak tertutup tombol kontrol */
+            padding-bottom: 70px; /* Padding bawah agar tidak tertutup navbar */
+            box-sizing: border-box; 
+            
+            display: none; /* Sembunyikan semua section secara default */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            
+            text-align: center; 
+        }
+        
+        /* Konten di dalam section */
+        .content-wrapper {
             padding: 20px;
-            margin: 20px auto;
+            margin: 0 auto;
             max-width: 600px;
             background: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
@@ -186,70 +207,89 @@
 
         <div id="video-controls">
             <button id="toggle-video-btn"><i class="fas fa-play"></i></button>
+            
+            <button id="toggle-mute-btn" style="margin-left: 10px;">
+                <i class="fas fa-volume-mute"></i>
+            </button>
         </div>
 
         <div class="content-section" id="detail">
-            <h2>Detail Acara</h2>
-            <p>Informasi lokasi, tanggal, dan waktu.</p>
+            <div class="content-wrapper">
+                <h2>Detail Acara</h2>
+                <p>Informasi lokasi, tanggal, dan waktu.</p>
+            </div>
         </div>
         
         <div class="content-section" id="galeri">
-            <h2>Galeri Foto</h2>
-            <p>Tempat foto-foto Anda berdua.</p>
+            <div class="content-wrapper">
+                <h2>Galeri Foto</h2>
+                <p>Tempat foto-foto Anda berdua.</p>
+            </div>
         </div>
         
         <div class="content-section" id="kado">
-            <h2><i class="fas fa-gift"></i> Kirim Hadiah & Tanda Kasih</h2>
-            <p>Doa restu Anda adalah karunia yang tak ternilai. Namun, jika Anda ingin memberikan hadiah sebagai bentuk tanda kasih, kami telah menyediakan layanan transfer digital.</p>
-            
-            <hr style="border-color: #6a4c9c; margin: 20px 0;">
+            <div class="content-wrapper">
+                <h2><i class="fas fa-gift"></i> Kirim Hadiah & Tanda Kasih</h2>
+                <p>Doa restu Anda adalah karunia yang tak ternilai. Namun, jika Anda ingin memberikan hadiah sebagai bentuk tanda kasih, kami telah menyediakan layanan transfer digital.</p>
+                
+                <hr style="border-color: #6a4c9c; margin: 20px 0;">
 
-            <div class="bank-info">
-                <h3>Untuk Ovi</h3>
-                <p><strong>BANK CENTRAL ASIA (BCA)</strong></p>
-                <p id="rekening-ovi">8910xxxxxx</p>
-                <button class="copy-btn" data-target="rekening-ovi">Salin No. Rekening</button>
-                <p>A.N. Ovi Damayanti</p>
+                <div class="bank-info">
+                    <h3>Untuk Ovi</h3>
+                    <p><strong>BANK CENTRAL ASIA (BCA)</strong></p>
+                    <p id="rekening-ovi">8910xxxxxx</p>
+                    <button class="copy-btn" data-target="rekening-ovi">Salin No. Rekening</button>
+                    <p>A.N. Ovi Damayanti</p>
+                </div>
+                
+                <hr style="border-color: #eee; margin: 15px 0;">
+
+                <div class="bank-info">
+                    <h3>Untuk Vian</h3>
+                    <p><strong>BANK MANDIRI</strong></p>
+                    <p id="rekening-vian">13700xxxxxx</p>
+                    <button class="copy-btn" data-target="rekening-vian">Salin No. Rekening</button>
+                    <p>A.N. Vian Pradipta</p>
+                </div>
+
+                <p style="font-size: 0.8em; margin-top: 25px;">Mohon konfirmasi setelah transfer agar kami dapat mencatatnya. Terima kasih banyak!</p>
             </div>
-            
-            <hr style="border-color: #eee; margin: 15px 0;">
-
-            <div class="bank-info">
-                <h3>Untuk Vian</h3>
-                <p><strong>BANK MANDIRI</strong></p>
-                <p id="rekening-vian">13700xxxxxx</p>
-                <button class="copy-btn" data-target="rekening-vian">Salin No. Rekening</button>
-                <p>A.N. Vian Pradipta</p>
-            </div>
-
-            <p style="font-size: 0.8em; margin-top: 25px;">Mohon konfirmasi setelah transfer agar kami dapat mencatatnya. Terima kasih banyak!</p>
         </div>
         
         <div class="content-section" id="rsvp">
-            <h2>RSVP & Ucapan</h2>
-            <p>Formulir kehadiran dan ucapan dari tamu.</p>
+            <div class="content-wrapper">
+                <h2>RSVP & Ucapan</h2>
+                <p>Formulir kehadiran dan ucapan dari tamu.</p>
+            </div>
+        </div>
+
+        <div class="content-section" id="profile">
+            <div class="content-wrapper">
+                <h2>Profile Pengantin</h2>
+                <p>Cerita dan informasi tentang Ovi & Vian.</p>
+            </div>
         </div>
         
     </div>
 
     <div id="navigator-bar" class="navbar-hidden">
-        <a href="#cover-page" class="nav-item">
+        <a href="#cover-page" class="nav-item" data-target="cover-page">
             <i class="fas fa-envelope"></i>
             <span>Undangan</span>
         </a>
-        <a href="#profile" class="nav-item">
+        <a href="#profile" class="nav-item" data-target="profile">
             <i class="fas fa-heart"></i>
             <span>Profile</span>
         </a>
-        <a href="#detail" class="nav-item">
+        <a href="#detail" class="nav-item active" data-target="detail">
             <i class="fas fa-calendar-alt"></i>
             <span>Acara</span>
         </a>
-        <a href="#galeri" class="nav-item">
+        <a href="#galeri" class="nav-item" data-target="galeri">
             <i class="fas fa-camera"></i>
             <span>Galeri</span>
         </a>
-        <a href="#kado" class="nav-item">
+        <a href="#kado" class="nav-item" data-target="kado">
             <i class="fas fa-gift"></i>
             <span>Kado</span>
         </a>
@@ -262,6 +302,44 @@
         var navBar = document.getElementById('navigator-bar');
         var toggleBtn = document.getElementById('toggle-video-btn');
         var icon = toggleBtn.querySelector('i');
+        
+        // Logika Mute/Unmute
+        const toggleMuteBtn = document.getElementById('toggle-mute-btn');
+        const muteIcon = toggleMuteBtn.querySelector('i');
+        let isMuted = true; // Sesuai dengan setting iframe awal (muted=1)
+
+        // --- FUNGSI TAMPILAN HALAMAN ---
+        function showSection(targetId) {
+            const sections = document.querySelectorAll('.content-section');
+            const navItems = document.querySelectorAll('.nav-item');
+
+            // 1. Sembunyikan semua section
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // 2. Hapus status active dari semua nav item
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 3. Tampilkan section yang ditargetkan
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+            
+            // 4. Set status active pada nav item yang sesuai
+            const targetNavItem = document.querySelector(`.nav-item[data-target="${targetId}"]`);
+            if (targetNavItem) {
+                targetNavItem.classList.add('active');
+            }
+            
+            // 5. Gulir ke atas halaman
+            document.getElementById('main-content').scrollTop = 0;
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
 
 
         // Callbacks untuk Vimeo
@@ -277,26 +355,25 @@
             navBar.classList.remove('navbar-hidden'); // Tampilkan navbar
         }
 
-        // Vimeo otomatis looping karena kita pakai parameter loop=1 di URL, tapi ini sebagai fallback
         function onPlayerEnded() {
             player.setCurrentTime(0);
             player.play();
         }
 
-
         // Inisialisasi Player Vimeo setelah DOM siap
         document.addEventListener('DOMContentLoaded', function() {
             var iframe = document.getElementById('vimeo-player');
             
+            // Inisialisasi Vimeo Player
             if (iframe) {
-                // Inisialisasi objek Vimeo Player
                 player = new Vimeo.Player(iframe);
                 
                 player.ready().then(function() {
-                    // Tampilkan navbar di awal (saat video paused)
+                    // Set status awal ke Paused dan Muted
                     onPlayerPause(); 
+                    player.setVolume(0); // Pastikan volume 0 untuk Autoplay di seluler
 
-                    // Tambahkan event listeners untuk status play/pause/ended
+                    // Tambahkan event listeners
                     player.on('play', onPlayerPlay);
                     player.on('pause', onPlayerPause);
                     player.on('ended', onPlayerEnded);
@@ -314,6 +391,9 @@
                     coverPage.style.display = 'none';
                     mainContent.style.display = 'block';
                     
+                    // Tampilkan section pertama ('detail')
+                    showSection('detail');
+                    
                     // Mulai Video Vimeo
                     if (player) {
                         player.play();
@@ -330,6 +410,39 @@
                 }
             });
             
+            // Logika Kontrol Mute/Unmute
+            toggleMuteBtn.addEventListener('click', function() {
+                if (isMuted) {
+                    player.setVolume(1); // Set volume ke 1 (maks)
+                    muteIcon.className = 'fas fa-volume-up';
+                    isMuted = false;
+                } else {
+                    player.setVolume(0); // Set volume ke 0 (mute)
+                    muteIcon.className = 'fas fa-volume-mute';
+                    isMuted = true;
+                }
+            });
+
+            // --- Logika Navigator Bar (Sistem Halaman) ---
+            document.querySelectorAll('#navigator-bar a[data-target]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const target = this.getAttribute('data-target');
+                    if(target === 'cover-page') {
+                        // Jika target adalah cover-page, lakukan refresh/re-load
+                        window.location.reload(); 
+                        return;
+                    }
+                    
+                    // Pause video dan tampilkan halaman baru
+                    if (player) {
+                        player.pause();
+                    }
+                    showSection(target);
+                });
+            });
+
             // --- Logika Salin Nomor Rekening ---
             document.querySelectorAll('.copy-btn').forEach(button => {
                 button.addEventListener('click', function() {
@@ -349,21 +462,6 @@
                     }).catch(err => {
                         console.error('Gagal menyalin teks: ', err);
                         alert('Gagal menyalin nomor rekening. Silakan salin manual.');
-                    });
-                });
-            });
-            
-            // Fungsi untuk Smooth Scrolling pada Navigator Bar 
-            document.querySelectorAll('#navigator-bar a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    // Pause video ketika navigasi diklik
-                    if (player) {
-                        player.pause();
-                    }
-
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
                     });
                 });
             });
