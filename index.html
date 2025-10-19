@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <style>
+        /* FONT IMPORT */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
         /* CSS Dasar untuk Full Screen dan Reset */
         body {
             margin: 0;
@@ -33,15 +36,12 @@
             z-index: 100;
             transition: opacity 1s ease-in-out;
             
-            /* **[GANTI INI]**: Sesuaikan dengan nama file gambar background gradien Anda */
             background-image: url('cover-background.jpg'); 
             position: relative; 
         }
 
         /* CONTAINER KARTU DI TENGAH */
         .cover-card {
-            width: 90%;
-            max-width: 400px;
             background-color: #fffaf5; 
             padding: 0; 
             border-radius: 20px;
@@ -51,23 +51,31 @@
             flex-direction: column;
             align-items: center;
             overflow: hidden; 
+            
+            max-width: 350px; 
+            width: 90%; 
+            margin: 0 20px; 
+            box-sizing: border-box; 
         }
         
         /* STYLE GAMBAR ARTWORK */
         .cover-card img.cover-art {
-            width: 100%; 
+            max-width: 80%; 
             height: auto;
             display: block;
+            margin: 30px auto 0; 
         }
 
         /* STYLE TOMBOL BUKA UNDANGAN (ORANGE) */
         #open-invitation-btn {
             width: 80%; 
             padding: 12px 0; 
-            margin-bottom: 20px; 
+            margin-top: 20px; 
+            margin-bottom: 30px; 
+            
             border: none;
-            background-color: #ff9800; /* Warna Orange */
-            color: #4b3e3e; /* Warna teks tombol (COKLAT/HITAM) */
+            background-color: #ff9800; 
+            color: #4b3e3e; 
             font-size: 1.1em;
             font-weight: 700;
             border-radius: 10px; 
@@ -98,7 +106,7 @@
             display: none; 
         }
         
-        /* Background Gambar (Aktif untuk Acara & Kado) */
+        /* Background Gambar */
         #image-background {
             position: fixed;
             top: 0;
@@ -147,28 +155,13 @@
             align-items: center;
             z-index: 50;
             
-            /* KUNCI: Membuatnya tidak terlihat dan tidak bisa diklik di awal */
             opacity: 0;
             transform: translateY(100%); 
             pointer-events: none;
+            visibility: hidden; 
             transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; 
         }
         
-        /* Class untuk menampilkan navbar (muncul dari bawah) */
-        .navbar-visible {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-        
-        /* Class untuk menyembunyikan navbar (saat video profile play) */
-        .navbar-hidden {
-             /* Kembali ke keadaan awal (sudah di set di #navigator-bar) */
-            opacity: 0;
-            transform: translateY(100%);
-            pointer-events: none;
-        }
-
         .nav-item {
             display: flex;
             flex-direction: column;
@@ -212,13 +205,27 @@
             padding: 20px;
             margin: 80px auto 100px; 
             width: 90%; 
-            max-width: 380px; 
+            max-width: 320px; 
             background: rgba(255, 255, 255, 0.85); 
             border-radius: 15px; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             position: relative;
+            
+            font-size: 0.9em; 
+        }
+        
+        .content-wrapper h2 {
+            font-size: 1.5em; 
+            margin-top: 0;
+        }
+        
+        .content-wrapper h3 {
+            font-size: 1.2em; 
+            margin-top: 15px;
+            margin-bottom: 5px;
         }
 
+        /* Gaya Tombol Copy */
         .copy-btn {
             background-color: #6a4c9c;
             color: white;
@@ -233,6 +240,46 @@
         .bank-info {
             margin-bottom: 15px;
         }
+
+        /* --- Gaya untuk Halaman Acara --- */
+        img.event-location-photo {
+            max-width: 100%; 
+            height: auto;
+            border-radius: 10px; 
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .event-button-container {
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: center;
+            gap: 10px; 
+            margin-top: 20px;
+        }
+
+        .event-button {
+            display: inline-flex; 
+            align-items: center;
+            justify-content: center;
+            padding: 10px 15px;
+            background-color: #6a4c9c; 
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+
+        .event-button:hover {
+            background-color: #5a3f8a;
+        }
+
+        .event-button i {
+            margin-right: 8px;
+            font-size: 1.1em;
+        }
     </style>
 </head>
 <body>
@@ -240,7 +287,7 @@
     <div id="cover-page">
         <div class="cover-card">
             
-            <img src="cover-art.png" alt="The Wedding of Ovi & Vian" class="cover-art">
+            <img src="cover-art.jpg" alt="The Wedding of Ovi & Vian" class="cover-art">
             
             <button id="open-invitation-btn">
                 BUKA UNDANGAN
@@ -273,8 +320,35 @@
         
         <div class="content-section" id="detail">
             <div class="content-wrapper">
-                <h2>Detail Acara</h2>
-                <p>Informasi lokasi, tanggal, dan waktu.</p>
+                <h2><i class="fas fa-calendar-alt"></i> Detail Acara</h2>
+                
+                <img src="event-location.jpg" alt="Lokasi Acara" class="event-location-photo">
+                
+                <h3>Akad Nikah</h3>
+                <p><strong>Sabtu, 22 November 2025</strong></p>
+                <p>Pukul 08:00 WIB - Selesai</p>
+                <p>Jl. Raya Contoh No. 123, Kota Bahagia</p>
+
+                <hr style="border-color: #eee; margin: 20px 0;">
+
+                <h3>Resepsi Pernikahan</h3>
+                <p><strong>Sabtu, 22 November 2025</strong></p>
+                <p>Pukul 11:00 WIB - 15:00 WIB</p>
+                <p>Gedung Serbaguna Indah, Kota Bahagia</p>
+
+                <div class="event-button-container">
+                    <a href="https://maps.app.goo.gl/YourGoogleMapsLinkHere" target="_blank" class="event-button">
+                        <i class="fas fa-map-marker-alt"></i> Google Maps
+                    </a>
+                    
+                    <a href="https://waze.com/ul?ll=-6.208763,106.845599&navigate=yes" target="_blank" class="event-button">
+                        <i class="fab fa-waze"></i> Waze
+                    </a>
+
+                    <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Pernikahan+Ovi+%26+Vian&details=Akad+dan+Resepsi+Pernikahan+Ovi+%26+Vian&dates=20251122T080000/20251122T150000&location=Gedung+Serbaguna+Indah,+Kota+Bahagia" target="_blank" class="event-button">
+                        <i class="fas fa-calendar-plus"></i> Tambah ke Kalender
+                    </a>
+                </div>
             </div>
         </div>
         
@@ -283,7 +357,7 @@
                 <h2><i class="fas fa-gift"></i> Kirim Hadiah & Tanda Kasih</h2>
                 <p>Doa restu Anda adalah karunia yang tak ternilai. Namun, jika Anda ingin memberikan hadiah sebagai bentuk tanda kasih, kami telah menyediakan layanan transfer digital.</p>
                 
-                <hr style="border-color: #6a4c9c; margin: 20px 0;">
+                <hr style="border-color: #eee; margin: 20px 0;">
 
                 <div class="bank-info">
                     <h3>Untuk Ovi</h3>
@@ -316,7 +390,7 @@
         
     </div>
 
-    <div id="navigator-bar" class="navbar-hidden">
+    <div id="navigator-bar">
         <a href="#" class="nav-item" data-target="cover-page">
             <i class="fas fa-envelope"></i>
             <span>Undangan</span>
@@ -355,18 +429,35 @@
         let isMuted = true; 
 
 
+        /* Fungsi untuk MENAMPILKAN Navbar */
+        function showNavbar() {
+            navBar.style.visibility = 'visible'; 
+            navBar.style.opacity = '1';
+            navBar.style.transform = 'translateY(0)';
+            navBar.style.pointerEvents = 'auto';
+        }
+
+        /* Fungsi untuk MENYEMBUNYIKAN Navbar */
+        function hideNavbar() {
+            navBar.style.opacity = '0';
+            navBar.style.transform = 'translateY(100%)';
+            navBar.style.pointerEvents = 'none';
+            setTimeout(() => {
+                navBar.style.visibility = 'hidden';
+            }, 300); 
+        }
+
+        /* Dihapus: onPlayerPlay dan onPlayerPause tidak lagi mengontrol Navbar */
         function onPlayerPlay() {
             playerStatus = 'playing';
             icon.className = 'fas fa-pause';
-            navBar.classList.remove('navbar-visible'); // Sembunyikan navbar saat video play
-            navBar.classList.add('navbar-hidden'); 
+            // Navbar tidak disembunyikan di sini
         }
 
         function onPlayerPause() {
             playerStatus = 'paused';
             icon.className = 'fas fa-play';
-            navBar.classList.remove('navbar-hidden'); 
-            navBar.classList.add('navbar-visible'); // Tampilkan navbar saat video pause
+            // Navbar tidak ditampilkan di sini
         }
 
         function onPlayerEnded() {
@@ -381,25 +472,26 @@
                 imageBackground.style.display = 'none';
                 videoControls.style.display = 'flex'; 
                 
-                navBar.classList.remove('navbar-visible');
-                navBar.classList.add('navbar-hidden');
-                
+                // Atur Video
                 if (player && playerStatus !== 'playing') {
+                    // Coba putar video
                     player.play().catch(error => {
-                        console.log("Autoplay di Profile diblokir, menunggu interaksi pengguna.");
+                        console.log("Autoplay diblokir.");
                         playerStatus = 'paused';
                         icon.className = 'fas fa-play';
-                        navBar.classList.add('navbar-visible'); // Tampilkan jika autoplay diblokir
-                        navBar.classList.remove('navbar-hidden');
                     });
-                }
+                } 
+
+                // Selalu tampilkan navbar di halaman konten
+                showNavbar(); 
+                
             } else {
                 videoPlayer.style.display = 'none';
                 imageBackground.style.display = 'block';
                 videoControls.style.display = 'none'; 
                 
-                navBar.classList.remove('navbar-hidden');
-                navBar.classList.add('navbar-visible'); // Selalu tampil di halaman lain
+                // Selalu tampilkan navbar di halaman konten
+                showNavbar(); 
                 
                 if (player && playerStatus === 'playing') {
                     player.pause();
@@ -440,6 +532,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             var iframe = document.getElementById('vimeo-player');
             
+            // Panggil hideNavbar() di awal untuk memastikan ia tersembunyi saat loading halaman sampul
+            hideNavbar();
+            
             if (iframe) {
                 player = new Vimeo.Player(iframe);
                 
@@ -456,8 +551,7 @@
             document.getElementById('open-invitation-btn').addEventListener('click', function() {
                 var coverPage = document.getElementById('cover-page');
                 var mainContent = document.getElementById('main-content');
-                var navBar = document.getElementById('navigator-bar');
-
+                
                 coverPage.style.opacity = '0';
                 
                 setTimeout(function() {
@@ -465,11 +559,7 @@
                     mainContent.style.display = 'block';
                     
                     showSection('profile'); 
-                    
-                    // Tampilkan navbar saat pertama kali masuk (kecuali video langsung play dan hidden)
-                    if (playerStatus !== 'playing') {
-                        navBar.classList.add('navbar-visible');
-                    }
+                    showNavbar(); // Tampilkan navbar setelah masuk ke main content
                     
                 }, 1000);
             });
