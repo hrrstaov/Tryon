@@ -155,7 +155,7 @@
             align-items: center;
             z-index: 50;
             
-            /* **SOLUSI UTAMA:** Pastikan selalu tersembunyi secara default */
+            /* Pastikan tersembunyi secara default */
             opacity: 0;
             transform: translateY(100%); 
             pointer-events: none;
@@ -512,13 +512,13 @@
         function onPlayerPlay() {
             playerStatus = 'playing';
             icon.className = 'fas fa-pause';
-            hideNavbar(); 
+            hideNavbar(); // Sembunyikan navbar saat video putar
         }
 
         function onPlayerPause() {
             playerStatus = 'paused';
             icon.className = 'fas fa-play';
-            showNavbar(); 
+            showNavbar(); // Tampilkan navbar saat video jeda
         }
 
         function onPlayerEnded() {
@@ -533,26 +533,33 @@
                 imageBackground.style.display = 'none';
                 videoControls.style.display = 'flex'; 
                 
-                if (player && playerStatus !== 'playing') {
-                    player.play().then(() => {
-                        // Jika berhasil play, navbar akan disembunyikan oleh onPlayerPlay
-                    }).catch(error => {
-                        console.log("Autoplay di Profile diblokir, menunggu interaksi pengguna.");
-                        playerStatus = 'paused';
-                        icon.className = 'fas fa-play';
-                        showNavbar(); 
-                    });
-                } else if (playerStatus === 'playing') {
-                     hideNavbar(); 
-                } else {
+                // **PERUBAHAN KRITIS DI SINI**
+                // Panggil showNavbar() lebih awal untuk memastikan navbar muncul
+                // saat masuk ke profile jika video belum play (autoplay diblokir)
+                if (playerStatus !== 'playing') {
                      showNavbar(); 
                 }
+                
+                if (player && playerStatus !== 'playing') {
+                    player.play().then(() => {
+                        // Jika berhasil play, onPlayerPlay akan hideNavbar()
+                    }).catch(error => {
+                        console.log("Autoplay di Profile diblokir.");
+                        playerStatus = 'paused';
+                        icon.className = 'fas fa-play';
+                        // Navbar sudah ditampilkan di atas.
+                    });
+                } else if (playerStatus === 'playing') {
+                     hideNavbar(); // Jika sudah playing dari halaman sebelumnya, sembunyikan.
+                } 
+                
             } else {
+                // Semua halaman lain
                 videoPlayer.style.display = 'none';
                 imageBackground.style.display = 'block';
                 videoControls.style.display = 'none'; 
                 
-                showNavbar(); 
+                showNavbar(); // Pastikan navbar muncul di halaman non-profile/non-cover
                 
                 if (player && playerStatus === 'playing') {
                     player.pause();
@@ -593,7 +600,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             var iframe = document.getElementById('vimeo-player');
             
-            // hideNavbar() di sini hanya sebagai penegas karena sudah ada CSS default
+            // Sembunyikan Navbar di awal (Halaman Cover)
             hideNavbar(); 
             
             if (iframe) {
@@ -612,15 +619,14 @@
             document.getElementById('open-invitation-btn').addEventListener('click', function() {
                 var coverPage = document.getElementById('cover-page');
                 var mainContent = document.getElementById('main-content');
-                var navBar = document.getElementById('navigator-bar');
-
+                
                 coverPage.style.opacity = '0';
                 
                 setTimeout(function() {
                     coverPage.style.display = 'none';
                     mainContent.style.display = 'block';
                     
-                    // Setelah dibuka, tampilkan section 'profile' dan otomatis tampilkan Navbar
+                    // Setelah dibuka, tampilkan section 'profile'
                     showSection('profile'); 
                     
                 }, 1000);
@@ -632,6 +638,7 @@
                 } else {
                     player.play();
                     if(isMuted) {
+                        // Jika video di-play secara manual, un-mute volume
                         player.setVolume(1); 
                         muteIcon.className = 'fas fa-volume-up';
                         isMuted = false;
