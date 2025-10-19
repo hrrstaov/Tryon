@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <style>
+        /* FONT IMPORT (Gunakan jika Anda ingin font spesifik) */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
         /* CSS Dasar untuk Full Screen dan Reset */
         body {
             margin: 0;
@@ -38,11 +41,11 @@
             position: relative; 
         }
 
-        /* CONTAINER KARTU DI TENGAH (WADAH UNTUK GAMBAR DAN TOMBOL) */
+        /* CONTAINER KARTU DI TENGAH */
         .cover-card {
             width: 90%;
             max-width: 400px;
-            background-color: #fffaf5; /* Warna Kuning muda/putih */
+            background-color: #fffaf5; 
             padding: 0; 
             border-radius: 20px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -53,7 +56,7 @@
             overflow: hidden; 
         }
         
-        /* STYLE GAMBAR ARTWORK (Nama, Tanggal, Foto Kartun) */
+        /* STYLE GAMBAR ARTWORK */
         .cover-card img.cover-art {
             width: 100%; 
             height: auto;
@@ -67,7 +70,7 @@
             margin-bottom: 20px; 
             border: none;
             background-color: #ff9800; /* Warna Orange */
-            color: #4b3e3e; /* Warna teks tombol (COKLAT/HITAM) */
+            color: #4b3e3e; 
             font-size: 1.1em;
             font-weight: 700;
             border-radius: 10px; 
@@ -84,7 +87,7 @@
             overflow-y: auto; 
         }
         
-        /* Vimeo Player (Hanya aktif untuk Profile) */
+        /* Vimeo Player */
         #vimeo-player {
             position: fixed;
             top: 0;
@@ -98,7 +101,7 @@
             display: none; 
         }
         
-        /* Background Gambar (Aktif untuk Acara & Kado) */
+        /* Background Gambar */
         #image-background {
             position: fixed;
             top: 0;
@@ -146,12 +149,23 @@
             justify-content: space-around;
             align-items: center;
             z-index: 50;
-            transition: transform 0.3s ease-in-out; 
-            transform: translateY(0); 
+            
+            opacity: 0;
+            transform: translateY(100%); 
+            pointer-events: none;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; 
+        }
+        
+        .navbar-visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
         }
         
         .navbar-hidden {
+            opacity: 0;
             transform: translateY(100%);
+            pointer-events: none;
         }
 
         .nav-item {
@@ -193,16 +207,28 @@
             background: transparent; 
         }
         
-        /* PERUBAHAN DI SINI UNTUK content-wrapper */
         .content-wrapper {
             padding: 20px;
             margin: 80px auto 100px; 
-            width: 90%; /* Menggunakan 90% lebar layar */
-            max-width: 380px; /* Lebar maksimal diperkecil */
-            background: rgba(255, 255, 255, 0.85); /* Putih semi-transparan */
-            border-radius: 15px; /* Sudut sedikit lebih bulat */
+            width: 90%; 
+            max-width: 320px; 
+            background: rgba(255, 255, 255, 0.85); 
+            border-radius: 15px; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             position: relative;
+            
+            font-size: 0.9em; 
+        }
+        
+        .content-wrapper h2 {
+            font-size: 1.5em; 
+            margin-top: 0;
+        }
+        
+        .content-wrapper h3 {
+            font-size: 1.2em; 
+            margin-top: 15px;
+            margin-bottom: 5px;
         }
 
         /* Gaya Tombol Copy */
@@ -220,6 +246,46 @@
         .bank-info {
             margin-bottom: 15px;
         }
+
+        /* --- Gaya Baru untuk Halaman Acara --- */
+        img.event-location-photo {
+            max-width: 100%; 
+            height: auto;
+            border-radius: 10px; 
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .event-button-container {
+            display: flex;
+            flex-wrap: wrap; /* Agar tombol bisa pindah baris jika terlalu banyak */
+            justify-content: center;
+            gap: 10px; /* Jarak antar tombol */
+            margin-top: 20px;
+        }
+
+        .event-button {
+            display: inline-flex; /* Menggunakan flex untuk icon dan teks */
+            align-items: center;
+            justify-content: center;
+            padding: 10px 15px;
+            background-color: #6a4c9c; /* Warna ungu */
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+
+        .event-button:hover {
+            background-color: #5a3f8a;
+        }
+
+        .event-button i {
+            margin-right: 8px;
+            font-size: 1.1em;
+        }
     </style>
 </head>
 <body>
@@ -227,10 +293,10 @@
     <div id="cover-page">
         <div class="cover-card">
             
-            <img src="cover-art.jpg" alt="The Wedding of Ovi & Vian" class="cover-art">
+            <img src="cover-art.jpg" alt="The Wedding of" class="cover-art">
             
             <button id="open-invitation-btn">
-                BUKA UNDANGAN
+                Open Invitation
             </button>
             
         </div>
@@ -260,8 +326,35 @@
         
         <div class="content-section" id="detail">
             <div class="content-wrapper">
-                <h2>Detail Acara</h2>
-                <p>Informasi lokasi, tanggal, dan waktu.</p>
+                <h2><i class="fas fa-calendar-alt"></i> Detail Acara</h2>
+                
+                <img src="event-location.jpg" alt="Lokasi Acara" class="event-location-photo">
+                
+                <h3>Akad Nikah</h3>
+                <p><strong>Sabtu, 22 November 2025</strong></p>
+                <p>Pukul 08:00 WIB - Selesai</p>
+                <p>Jl. Raya Contoh No. 123, Kota Bahagia</p>
+
+                <hr style="border-color: #eee; margin: 20px 0;">
+
+                <h3>Resepsi Pernikahan</h3>
+                <p><strong>Sabtu, 22 November 2025</strong></p>
+                <p>Pukul 11:00 WIB - 15:00 WIB</p>
+                <p>Gedung Serbaguna Indah, Kota Bahagia</p>
+
+                <div class="event-button-container">
+                    <a href="https://maps.app.goo.gl/YourGoogleMapsLinkHere" target="_blank" class="event-button">
+                        <i class="fas fa-map-marker-alt"></i> Google Maps
+                    </a>
+                    
+                    <a href="https://waze.com/ul?ll=-6.208763,106.845599&navigate=yes" target="_blank" class="event-button">
+                        <i class="fab fa-waze"></i> Waze
+                    </a>
+
+                    <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Pernikahan+Ovi+%26+Vian&details=Akad+dan+Resepsi+Pernikahan+Ovi+%26+Vian&dates=20251122T080000/20251122T150000&location=Gedung+Serbaguna+Indah,+Kota+Bahagia" target="_blank" class="event-button">
+                        <i class="fas fa-calendar-plus"></i> Tambah ke Kalender
+                    </a>
+                </div>
             </div>
         </div>
         
@@ -270,7 +363,7 @@
                 <h2><i class="fas fa-gift"></i> Kirim Hadiah & Tanda Kasih</h2>
                 <p>Doa restu Anda adalah karunia yang tak ternilai. Namun, jika Anda ingin memberikan hadiah sebagai bentuk tanda kasih, kami telah menyediakan layanan transfer digital.</p>
                 
-                <hr style="border-color: #6a4c9c; margin: 20px 0;">
+                <hr style="border-color: #eee; margin: 20px 0;">
 
                 <div class="bank-info">
                     <h3>Untuk Ovi</h3>
@@ -303,7 +396,7 @@
         
     </div>
 
-    <div id="navigator-bar" class="navbar-hidden">
+    <div id="navigator-bar">
         <a href="#" class="nav-item" data-target="cover-page">
             <i class="fas fa-envelope"></i>
             <span>Undangan</span>
@@ -345,13 +438,15 @@
         function onPlayerPlay() {
             playerStatus = 'playing';
             icon.className = 'fas fa-pause';
+            navBar.classList.remove('navbar-visible'); 
             navBar.classList.add('navbar-hidden'); 
         }
 
         function onPlayerPause() {
             playerStatus = 'paused';
             icon.className = 'fas fa-play';
-            navBar.classList.remove('navbar-hidden');
+            navBar.classList.remove('navbar-hidden'); 
+            navBar.classList.add('navbar-visible'); 
         }
 
         function onPlayerEnded() {
@@ -366,6 +461,7 @@
                 imageBackground.style.display = 'none';
                 videoControls.style.display = 'flex'; 
                 
+                navBar.classList.remove('navbar-visible');
                 navBar.classList.add('navbar-hidden');
                 
                 if (player && playerStatus !== 'playing') {
@@ -373,6 +469,7 @@
                         console.log("Autoplay di Profile diblokir, menunggu interaksi pengguna.");
                         playerStatus = 'paused';
                         icon.className = 'fas fa-play';
+                        navBar.classList.add('navbar-visible'); 
                         navBar.classList.remove('navbar-hidden');
                     });
                 }
@@ -382,6 +479,7 @@
                 videoControls.style.display = 'none'; 
                 
                 navBar.classList.remove('navbar-hidden');
+                navBar.classList.add('navbar-visible'); 
                 
                 if (player && playerStatus === 'playing') {
                     player.pause();
@@ -422,6 +520,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             var iframe = document.getElementById('vimeo-player');
             
+            navBar.classList.add('navbar-hidden');
+            
             if (iframe) {
                 player = new Vimeo.Player(iframe);
                 
@@ -438,6 +538,7 @@
             document.getElementById('open-invitation-btn').addEventListener('click', function() {
                 var coverPage = document.getElementById('cover-page');
                 var mainContent = document.getElementById('main-content');
+                var navBar = document.getElementById('navigator-bar');
 
                 coverPage.style.opacity = '0';
                 
@@ -446,6 +547,10 @@
                     mainContent.style.display = 'block';
                     
                     showSection('profile'); 
+                    
+                    if (playerStatus !== 'playing') {
+                        navBar.classList.add('navbar-visible');
+                    }
                     
                 }, 1000);
             });
