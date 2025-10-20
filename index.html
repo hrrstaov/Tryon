@@ -612,9 +612,9 @@
                     data.reverse().forEach(item => { 
                         
                         // ⚠️ PASTIKAN item.Nama, item.Kehadiran, item.Pesan SAMA dengan NAMA KOLOM di Google Sheet Anda
-                        const guestName = item.Nama_Anda || item.Nama; // Ganti 'Nama_Anda' jika nama kolom berbeda
+                        const guestName = item.Nama; // Ganti 'Nama_Anda' jika nama kolom berbeda
                         const attendanceStatus = item.Kehadiran; // Ganti jika nama kolom berbeda
-                        const messageText = item.Pesan_Ucapan_Indah || item.Pesan; // Ganti jika nama kolom berbeda
+                        const messageText = item.Pesan; // Ganti jika nama kolom berbeda
                         
     
 
