@@ -485,8 +485,8 @@
                     <label for="attendance">Confirm your Attendance:</label>
                     <select id="attendance" name="entry.1378431543" required>
                         <option value="">-- Choose --</option>
-                        <option value="Hadir">Yes</option>
-                        <option value="Tidak hadir">No</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
                     </select>
 
                     <label for="message">Message :</label>
@@ -621,9 +621,9 @@
                         // Ubah nilai dari Sheet menjadi huruf kapital semua sebelum membandingkan
                         const statusUpper = attendanceStatus.toUpperCase(); 
 
-                        const icon = statusUpper === 'HADIR' ? 
-                            '<span style="color: green;"><i class="fas fa-check-circle"></i> Hadir</span>' : 
-                            '<span style="color: red;"><i class="fas fa-times-circle"></i> Tidak Hadir</span>';
+                        const icon = statusUpper === 'YES' ? 
+                            '<span style="color: green;"><i class="fas fa-check-circle"></i> Yes</span>' : 
+                            '<span style="color: red;"><i class="fas fa-times-circle"></i> No</span>';
 
                         const itemHtml = `
                             <div class="guestbook-item">
@@ -829,7 +829,7 @@ rsvpForm.addEventListener('submit', function(e) {
 
     // Tampilkan tombol loading atau nonaktifkan tombol submit (Opsional)
     const submitBtn = rsvpForm.querySelector('.rsvp-submit-btn');
-    submitBtn.textContent = 'Mengirim...';
+    submitBtn.textContent = 'Sending...';
     submitBtn.disabled = true;
 
     // Lakukan pengiriman data ke Google Form menggunakan fetch
@@ -842,7 +842,7 @@ rsvpForm.addEventListener('submit', function(e) {
         // Jika berhasil, tampilkan pesan sukses
         successMessage.style.display = 'block';
         rsvpForm.reset();
-        submitBtn.textContent = 'KIRIM UCAPAN';
+        submitBtn.textContent = 'Send Message';
         submitBtn.disabled = false;
 
         // Sembunyikan pesan sukses
@@ -858,8 +858,8 @@ rsvpForm.addEventListener('submit', function(e) {
     })
     .catch(error => {
         console.error('Error submitting form:', error);
-        alert('Gagal mengirim ucapan. Silakan coba lagi. (Cek Console untuk detail)');
-        submitBtn.textContent = 'KIRIM UCAPAN';
+        alert('Failed sending message');
+        submitBtn.textContent = 'Send Message';
         submitBtn.disabled = false;
     });
 });
