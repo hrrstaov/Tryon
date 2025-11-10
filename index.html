@@ -24,7 +24,7 @@
             overflow-x: hidden;
             background-color: #9BBDE6;
 
-            /* hide scrollbar vertikal */
+            /* hide scrollbar vertikal pada cover */
             overflow-y: hidden;
         }
 
@@ -45,7 +45,7 @@
             text-align: center;
             color: #4b3e3e;
             z-index: 100;
-            transition: opacity 0.3s ease-in-out; /* Transisi dipercepat */
+            transition: opacity 0.3s ease-in-out; 
 
 
             background-image: url('cover-background.jpg');
@@ -82,7 +82,7 @@
         #open-invitation-btn {
             width: 100%;
             padding: 12px 0;
-            margin-top: 20px; /* Diperbaiki */
+            margin-top: 20px; 
             margin-bottom: 0;
 
             border: none;
@@ -105,7 +105,7 @@
         }
 
 
-        /* GANTI DARI VIMEO JADI GOOGLE DRIVE */
+        /* KEMBALI KE GOOGLE DRIVE */
         #drive-player {
             position: fixed;
             top: 0;
@@ -137,8 +137,8 @@
 
         #video-controls {
             position: fixed;
-            top: 15px; /* Pojok Kanan Atas */
-            right: 15px; /* Pojok Kanan Atas */
+            top: 15px; 
+            right: 15px; 
             transform: none;
             z-index: 51;
             transition: opacity 0.3s;
@@ -147,7 +147,7 @@
             /* tombol row horizontal */
             display: flex;
             flex-direction: row;
-            gap: 10px; /* Diperbaiki */
+            gap: 10px; 
         }
 
         #video-controls button {
@@ -405,7 +405,7 @@
     <div id="main-content">
 
         <iframe id="drive-player"
-            src="https://drive.google.com/file/d/1L70HbS8v_RoHVs27YeahpGrJeurEHCdX/preview?autoplay=1&loop=1&mute=1&pli=1"
+            src="https://drive.google.com/file/d/1L70HbS8v_RoHVs27YeahpGrJeurEHCdX/preview"
             frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen>
         </iframe>
         <div id="image-background"></div>
@@ -552,11 +552,11 @@
 
     <script>
         // TIDAK ADA API GOOGLE DRIVE, HANYA LOGIKA PLACEHOLDER
-        var playerStatus = 'paused'; 
+        var playerStatus = 'paused'; // Ganti status awal ke 'paused'
         var navBar = document.getElementById('navigator-bar');
         var toggleBtn = document.getElementById('toggle-video-btn');
         var icon = toggleBtn.querySelector('i');
-        // Ganti nama variabel dari vimeo-player ke drivePlayerIframe
+        // KODE BARU: drivePlayerIframe tidak lagi memerlukan API
         const drivePlayerIframe = document.getElementById('drive-player'); 
         const imageBackground = document.getElementById('image-background');
         const videoControls = document.getElementById('video-controls');
@@ -564,19 +564,21 @@
         const toggleMuteBtn = document.getElementById('toggle-mute-btn');
         const muteIcon = toggleMuteBtn.querySelector('i');
         let isMuted = true;
-        let isGuestbookLoaded = false; 
+        let isGuestbookLoaded = false;
 
         
-        /* FUNGSI KONTROL VIDEO (TIDAK BERFUNGSI PADA DRIVE EMBED, HANYA MENGUBAH ICON) */
+        /* FUNGSI KONTROL VIDEO (HANYA MENGUBAH ICON) */
+        // Fungsi ini hanya mengubah ikon karena Drive tidak memiliki API yang dapat diakses dari luar.
+        // Pemutaran/mute harus dilakukan manual oleh user di dalam iframe.
         function togglePlayPause() {
             if (playerStatus === 'playing') {
                 playerStatus = 'paused';
                 icon.className = 'fas fa-play';
-                console.warn("Google Drive: Kontrol tidak didukung oleh API.");
+                console.warn("Drive: Kontrol play/pause tidak didukung oleh API.");
             } else {
                 playerStatus = 'playing';
                 icon.className = 'fas fa-pause';
-                console.warn("Google Drive: Kontrol tidak didukung oleh API.");
+                console.warn("Drive: Kontrol play/pause tidak didukung oleh API.");
             }
         }
 
@@ -584,11 +586,11 @@
             if (isMuted) {
                 muteIcon.className = 'fas fa-volume-up';
                 isMuted = false;
-                console.warn("Google Drive: Kontrol tidak didukung oleh API.");
+                console.warn("Drive: Kontrol mute tidak didukung oleh API.");
             } else {
                 muteIcon.className = 'fas fa-volume-mute';
                 isMuted = true;
-                console.warn("Google Drive: Kontrol tidak didukung oleh API.");
+                console.warn("Drive: Kontrol mute tidak didukung oleh API.");
             }
         }
         /* AKHIR FUNGSI KONTROL DRIVE */
@@ -675,7 +677,6 @@
                 drivePlayerIframe.style.display = 'block'; // Tampilkan drive player
                 imageBackground.style.display = 'none';
                 videoControls.style.display = 'flex';
-                // Tidak ada kontrol play/pause di sini
                 
                 showNavbar();
 
@@ -734,8 +735,6 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             
-            // Kode inisialisasi Vimeo dihapus
-
             hideNavbar();
             
             document.getElementById('open-invitation-btn').addEventListener('click', function () {
