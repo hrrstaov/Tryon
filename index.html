@@ -761,4 +761,84 @@
 
 
             document.querySelectorAll('#navigator-bar a[data-target]').forEach(anchor => {
-                anchor.addEventListener('click
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    const target = this.getAttribute('data-target');
+                    showSection(target);
+                });
+            });
+
+
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const targetId = this.getAttribute('data-target');
+                    const elementToCopy = document.getElementById(targetId);
+                    const textToCopy = elementToCopy.textContent || elementToCopy.innerText;
+
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = 'Success!';
+                        this.style.backgroundColor = '#3075A2';
+
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                            this.style.backgroundColor = '#274D77';
+                        }, 1500);
+                    }).catch(err => {
+                        console.error('Failed Copy: ', err);
+                        alert('Failed to copy account number. Please copy manually.');
+                    });
+                });
+            });
+
+            imageBackground.style.display = 'block';
+
+            const rsvpForm = document.getElementById('rsvp-form');
+            const successMessage = document.getElementById('rsvp-success-message');
+
+            rsvpForm.addEventListener('submit', function (e) {
+
+                e.preventDefault();
+                const actionUrl = rsvpForm.action;
+                const formData = new FormData(rsvpForm);
+                const submitBtn = rsvpForm.querySelector('.rsvp-submit-btn');
+                submitBtn.textContent = 'Sending...';
+                submitBtn.disabled = true;
+
+
+                fetch(actionUrl, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors'
+                })
+                    .then(() => {
+                        successMessage.style.display = 'block';
+                        rsvpForm.reset();
+                        submitBtn.textContent = 'SEND';
+                        submitBtn.disabled = false;
+
+
+                        setTimeout(() => {
+                            successMessage.style.display = 'none';
+                        }, 3000);
+
+
+                        if (document.getElementById('rsvp').style.display === 'block') {
+                            loadGuestbook();
+                        }
+
+                    })
+                    .catch(error => {
+                        console.error('Error submitting form:', error);
+                        alert('Failed sending message');
+                        submitBtn.textContent = 'SEND';
+                        submitBtn.disabled = false;
+                    });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
