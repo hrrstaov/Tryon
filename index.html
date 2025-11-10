@@ -45,7 +45,7 @@
             text-align: center;
             color: #4b3e3e;
             z-index: 100;
-            transition: opacity 1s ease-in-out;
+            transition: opacity 0.3s ease-in-out; /* Transisi dipercepat */
 
 
             background-image: url('cover-background.jpg');
@@ -82,7 +82,7 @@
         #open-invitation-btn {
             width: 100%;
             padding: 12px 0;
-            margin-top: 0px;
+            margin-top: 20px; /* Diperbaiki */
             margin-bottom: 0;
 
             border: none;
@@ -105,7 +105,8 @@
         }
 
 
-        #vimeo-player {
+        /* GANTI DARI VIMEO JADI GOOGLE DRIVE */
+        #drive-player {
             position: fixed;
             top: 0;
             left: 0;
@@ -136,8 +137,8 @@
 
         #video-controls {
             position: fixed;
-            top: 15px;
-            right: 10px;
+            top: 15px; /* Pojok Kanan Atas */
+            right: 15px; /* Pojok Kanan Atas */
             transform: none;
             z-index: 51;
             transition: opacity 0.3s;
@@ -146,7 +147,7 @@
             /* tombol row horizontal */
             display: flex;
             flex-direction: row;
-            gap: 5px;
+            gap: 10px; /* Diperbaiki */
         }
 
         #video-controls button {
@@ -271,7 +272,7 @@
             margin-bottom: 15px;
         }
 
-        
+
         img.event-location-photo {
             max-width: 100%;
             height: auto;
@@ -354,7 +355,7 @@
             display: none;
         }
 
-        
+
         .guestbook-item {
             background-color: #f7fef7;
             border-left: 5px solid #274D77;
@@ -403,18 +404,24 @@
 
     <div id="main-content">
 
-        <iframe id="vimeo-player"
-            src="https://player.vimeo.com/video/1132115856?background=1&autoplay=0&loop=1&muted=1&playsinline=1&autopause=0&api=1&player_id=vimeo-player"
+        <iframe id="drive-player"
+            src="https://drive.google.com/file/d/1L70HbS8v_RoHVs27YeahpGrJeurEHCdX/preview?autoplay=1&loop=1&mute=1&pli=1"
             frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen>
         </iframe>
-
         <div id="image-background"></div>
 
         <div id="video-controls">
             <button id="toggle-video-btn"><i class="fas fa-play"></i></button>
-            <button id="toggle-mute-btn" style="margin-left: 10px;">
+            <button id="toggle-mute-btn">
                 <i class="fas fa-volume-mute"></i>
             </button>
+        </div>
+        
+        <div class="content-section" id="profile">
+            <div class="content-wrapper">
+                <h2><i class="fas fa-heart"></i> The Bride & Groom</h2>
+                <p>Silahkan tambahkan konten Profile Anda di sini.</p>
+            </div>
         </div>
 
         <div class="content-section" id="detail">
@@ -455,10 +462,14 @@
                     <p><strong>BANK CENTRAL ASIA (BCA)</strong></p>
                     <p id="rekening-ovi">2711574362</p>
                     <button class="copy-btn" data-target="rekening-ovi">Copy Account Number</button>
-                    <p><strong>SEABANK</strong></p>
+
+                    <p style="margin-top: 10px;">(Alternatif BCA Ovilia)</p>
+                    <p id="rekening-ovi-alt">7330554210</p>
+                    <button class="copy-btn" data-target="rekening-ovi-alt">Copy Account Number</button>
+                    <p style="margin-top: 15px;"><strong>SEABANK</strong></p>
                     <p id="rekening-ovi1">901225306855</p>
                     <button class="copy-btn" data-target="rekening-ovi1">Copy Account Number</button>
-                    <p>A.N. Herrista Ovilia</p>
+                    <p style="margin-top: 10px;">A.N. Herrista Ovilia</p>
                 </div>
 
                 <hr style="border-color: #eee; margin: 15px 0;">
@@ -542,21 +553,49 @@
         </a>
     </div>
 
-    <script src="https://player.vimeo.com/api/player.js"></script>
     <script>
-        var player;
-        var playerStatus = 'paused';
+        // TIDAK ADA API GOOGLE DRIVE, HANYA LOGIKA PLACEHOLDER
+        var playerStatus = 'paused'; 
         var navBar = document.getElementById('navigator-bar');
         var toggleBtn = document.getElementById('toggle-video-btn');
         var icon = toggleBtn.querySelector('i');
-        const videoPlayer = document.getElementById('vimeo-player');
+        // Ganti nama variabel dari vimeo-player ke drivePlayerIframe
+        const drivePlayerIframe = document.getElementById('drive-player'); 
         const imageBackground = document.getElementById('image-background');
         const videoControls = document.getElementById('video-controls');
 
         const toggleMuteBtn = document.getElementById('toggle-mute-btn');
         const muteIcon = toggleMuteBtn.querySelector('i');
         let isMuted = true;
-        let isGuestbookLoaded = false; // Flag untuk Guestbook
+        let isGuestbookLoaded = false; 
+
+        
+        /* FUNGSI KONTROL VIDEO (TIDAK BERFUNGSI PADA DRIVE EMBED, HANYA MENGUBAH ICON) */
+        function togglePlayPause() {
+            if (playerStatus === 'playing') {
+                playerStatus = 'paused';
+                icon.className = 'fas fa-play';
+                console.warn("Google Drive: Kontrol tidak didukung oleh API.");
+            } else {
+                playerStatus = 'playing';
+                icon.className = 'fas fa-pause';
+                console.warn("Google Drive: Kontrol tidak didukung oleh API.");
+            }
+        }
+
+        function toggleMute() {
+            if (isMuted) {
+                muteIcon.className = 'fas fa-volume-up';
+                isMuted = false;
+                console.warn("Google Drive: Kontrol tidak didukung oleh API.");
+            } else {
+                muteIcon.className = 'fas fa-volume-mute';
+                isMuted = true;
+                console.warn("Google Drive: Kontrol tidak didukung oleh API.");
+            }
+        }
+        /* AKHIR FUNGSI KONTROL DRIVE */
+
 
         /* show Navbar */
         function showNavbar() {
@@ -576,27 +615,13 @@
             }, 300);
         }
 
-        function onPlayerPlay() {
-            playerStatus = 'playing';
-            icon.className = 'fas fa-pause';
-        }
-
-        function onPlayerPause() {
-            playerStatus = 'paused';
-            icon.className = 'fas fa-play';
-        }
-
-        function onPlayerEnded() {
-            player.setCurrentTime(0);
-            player.play();
-        }
 
         /* show guestbook */
         function loadGuestbook() {
             const guestbookList = document.getElementById('guestbook-list');
             guestbookList.innerHTML = '<p style="text-align: center;">Loading...</p>';
 
-            
+            // URL SheetDB Anda
             const API_URL = 'https://sheetdb.io/api/v1/0wlvsc7j5h03l';
 
             fetch(API_URL)
@@ -650,27 +675,18 @@
 
         function setBackground(targetId) {
             if (targetId === 'profile') {
-                videoPlayer.style.display = 'block';
+                drivePlayerIframe.style.display = 'block'; // Tampilkan drive player
                 imageBackground.style.display = 'none';
                 videoControls.style.display = 'flex';
-
-                if (player && playerStatus !== 'playing') {
-                    player.play().catch(error => {
-                        console.log("Autoplay diblokir.");
-                    });
-                }
-
+                // Tidak ada kontrol play/pause di sini
+                
                 showNavbar();
 
             } else {
-                videoPlayer.style.display = 'none';
+                drivePlayerIframe.style.display = 'none'; // Sembunyikan drive player
                 imageBackground.style.display = 'block';
                 videoControls.style.display = 'none';
-
-                if (player && playerStatus === 'playing') {
-                    player.pause();
-                }
-
+                
                 showNavbar();
             }
         }
@@ -720,25 +736,11 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            var iframe = document.getElementById('vimeo-player');
+            
+            // Kode inisialisasi Vimeo dihapus
 
             hideNavbar();
-
-            // Vimeo Player
-            if (iframe) {
-                player = new Vimeo.Player(iframe);
-
-                player.ready().then(function () {
-                    onPlayerPause();
-                    player.setVolume(0);
-
-                    player.on('play', onPlayerPlay);
-                    player.on('pause', onPlayerPause);
-                    player.on('ended', onPlayerEnded);
-                });
-            }
-
-
+            
             document.getElementById('open-invitation-btn').addEventListener('click', function () {
                 var coverPage = document.getElementById('cover-page');
                 var mainContent = document.getElementById('main-content');
@@ -750,116 +752,13 @@
                     mainContent.style.display = 'block';
                     document.body.style.overflowY = 'auto'; // show scrollball
                     showSection('profile'); // show first page
-                }, 1000);
+                }, 300); // Transisi dipercepat menjadi 300ms
             });
 
-            // Video Controls
-            toggleBtn.addEventListener('click', function () {
-                if (playerStatus === 'playing') {
-                    player.pause();
-                } else {
-                    player.play();
-                    // Auto-unmute 
-                    if (isMuted) {
-                        player.setVolume(1);
-                        muteIcon.className = 'fas fa-volume-up';
-                        isMuted = false;
-                    }
-                }
-            });
-
-            toggleMuteBtn.addEventListener('click', function () {
-                if (isMuted) {
-                    player.setVolume(1);
-                    muteIcon.className = 'fas fa-volume-up';
-                    isMuted = false;
-                } else {
-                    player.setVolume(0);
-                    muteIcon.className = 'fas fa-volume-mute';
-                    isMuted = true;
-                }
-            });
+            // Video Controls (memanggil fungsi placeholder)
+            toggleBtn.addEventListener('click', togglePlayPause);
+            toggleMuteBtn.addEventListener('click', toggleMute);
 
 
             document.querySelectorAll('#navigator-bar a[data-target]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-
-                    const target = this.getAttribute('data-target');
-                    showSection(target);
-                });
-            });
-
-
-            document.querySelectorAll('.copy-btn').forEach(button => {
-                button.addEventListener('click', function () {
-                    const targetId = this.getAttribute('data-target');
-                    const elementToCopy = document.getElementById(targetId);
-                    const textToCopy = elementToCopy.textContent || elementToCopy.innerText;
-
-                    navigator.clipboard.writeText(textToCopy).then(() => {
-                        const originalText = this.textContent;
-                        this.textContent = 'Success!';
-                        this.style.backgroundColor = '#3075A2';
-
-                        setTimeout(() => {
-                            this.textContent = originalText;
-                            this.style.backgroundColor = '#274D77';
-                        }, 1500);
-                    }).catch(err => {
-                        console.error('Failed Copy: ', err);
-                        alert('Failed to copy account number. Please copy manually.');
-                    });
-                });
-            });
-
-            imageBackground.style.display = 'block';
-
-            const rsvpForm = document.getElementById('rsvp-form');
-            const successMessage = document.getElementById('rsvp-success-message');
-
-            rsvpForm.addEventListener('submit', function (e) {
-
-                e.preventDefault();
-                const actionUrl = rsvpForm.action;
-                const formData = new FormData(rsvpForm);
-                const submitBtn = rsvpForm.querySelector('.rsvp-submit-btn');
-                submitBtn.textContent = 'Sending...';
-                submitBtn.disabled = true;
-
-
-                fetch(actionUrl, {
-                    method: 'POST',
-                    body: formData,
-                    mode: 'no-cors'
-                })
-                    .then(() => {
-                        successMessage.style.display = 'block';
-                        rsvpForm.reset();
-                        submitBtn.textContent = 'Send Message';
-                        submitBtn.disabled = false;
-
-
-                        setTimeout(() => {
-                            successMessage.style.display = 'none';
-                        }, 3000);
-
-
-                        if (document.getElementById('rsvp').style.display === 'block') {
-                            loadGuestbook();
-                        }
-
-                    })
-                    .catch(error => {
-                        console.error('Error submitting form:', error);
-                        alert('Failed sending message');
-                        submitBtn.textContent = 'Send Message';
-                        submitBtn.disabled = false;
-                    });
-            });
-        });
-    </script>
-
-</body>
-
-</html>
+                anchor.addEventListener('click
